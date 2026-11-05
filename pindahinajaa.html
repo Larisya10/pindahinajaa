@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PINDAHIN AJA — Barang nggak kepakai? Pindahin aja.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { dark:'#243C2C', moss:'#7A9445', vanilla:'#ECE69D', powder:'#A9B6C4', glaucous:'#59789F' },
+    fontFamily: { sans:['Manrope','sans-serif'], serif:['Fraunces','serif'] }
+  } }
+}
+</script>
+<style>
+:root{
+  --dark:#243C2C; --moss:#7A9445; --vanilla:#ECE69D; --powder:#A9B6C4; --glaucous:#59789F;
+  --page-bg:#EEF0FB;      /* ganti ke #FFFFFF kalau mau background putih penuh */
+  --active:#12291C; --campus:#DCE6FA; --lime:#C6E03A; --pastel:#E4F0CA;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',sans-serif;background:#fff;color:#111827;overflow-x:hidden}
+section[id]{scroll-margin-top:72px}
+.serif{font-family:Fraunces,serif}
+.press{transition:transform .15s ease,background-color .2s}
+.press:active{transform:scale(.95)}
+.header-nav-item{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:9999px;color:rgba(255,255,255,0.82);transition:all .2s ease}
+.header-nav-item:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.header-nav-item.active{background:rgba(198,224,58,0.18);color:#C6E03A;box-shadow:inset 0 0 0 1px rgba(198,224,58,0.2)}
+.hit{position:relative}
+.hit::after{content:'';position:absolute;inset:-8px}
+.bg-page{background:var(--page-bg)}
+.back-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:9999px;background:#F6F4EA;border:1px solid #E8E4D0;color:#243C2C;font-size:12px;font-weight:700;transition:transform .2s ease,background-color .2s ease}
+.back-btn:hover{background:#EEF0E8;transform:translateX(-2px)}
+.floating-card{animation:floatCard 5s ease-in-out infinite}
+.floating-card:nth-child(2n){animation-delay:.4s}
+.floating-card:nth-child(3n){animation-delay:.8s}
+@keyframes floatCard{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(1.4deg)}}
+
+/* hero */
+.slide{opacity:0;transform:translateX(24px);transition:opacity .5s ease-in-out,transform .5s ease-in-out;pointer-events:none}
+.slide.on{opacity:1;transform:none;pointer-events:auto}
+#hero{touch-action:pan-y;cursor:grab;user-select:none}
+#hero:active{cursor:grabbing}
+.dot{height:6px;width:6px;border-radius:9999px;background:rgba(255,255,255,.4);transition:width .3s,background .3s}
+.dot.on{width:24px;background:#fff}
+
+/* kartu bertumpuk */
+.fan,.stack{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 4px 16px;-webkit-overflow-scrolling:touch}
+.fcard{flex:0 0 220px;scroll-snap-align:center;cursor:pointer;outline:none}
+@media(min-width:768px){
+  .fan{display:block;position:relative;height:400px;overflow:visible;padding:0;margin-bottom:0}
+  .stack{display:block;position:relative;height:300px;overflow:visible;padding:0}
+  .fan .fcard{position:absolute;left:50%;top:24px;width:290px;margin-left:-145px}
+  .stack .fcard{position:absolute;left:50%;top:16px;width:210px;margin-left:-105px}
+  .fcard{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s,filter .35s;flex:none}
+  .fcard:not(.is-active){filter:brightness(.97)}
+  .fcard:not(.is-active):hover{--lift:-6px;z-index:20!important}
+  .fcard:focus-visible>div{outline:3px solid var(--glaucous);outline-offset:2px}
+}
+.fcard>div{box-shadow:0 12px 30px rgba(30,58,95,.18)}
+.fcard.is-active>div{box-shadow:0 20px 40px rgba(30,58,95,.28)}
+
+/* produk */
+.pcard img{transition:transform .5s ease;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.pcard:hover img{transform:scale(1.06)}
+.pcard{transition:transform .25s ease,box-shadow .25s ease;display:flex;flex-direction:column;height:100%}
+.pcard > .relative{height:220px}
+.pcard > div:last-child{display:flex;flex-direction:column;flex:1}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(36,60,44,.12)}
+#products{max-width:1280px}
+.type-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:9999px;background:#EEF0E8;color:#243C2C;font-size:11px;font-weight:700;border:1px solid #E8E4D0}
+.detail-page{background:linear-gradient(180deg,#F8F8FC 0%,#FFFFFF 100%)}
+.detail-page .detail-card{box-shadow:0 18px 48px rgba(30,58,95,.12)}
+.heart.on svg{fill:#EF4444;stroke:#EF4444;animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+@media(min-width:640px){
+  #products{grid-template-columns:repeat(4,minmax(0,1fr));}
+}
+@media(min-width:1180px){
+  #products{grid-template-columns:repeat(5,minmax(0,1fr));}
+}
+@media(min-width:768px){
+  .stack{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;overflow:visible;height:auto;padding:0}
+  .stack .fcard{position:relative;left:auto;top:auto;width:100%;margin-left:0;transform:none!important}
+}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal-img{opacity:0;transform:scale(.98);transition:opacity .6s ease,transform .6s ease}
+.reveal-img.in{opacity:1;transform:none}
+
+/* logo */
+.blurpulse{animation:blurpulse .45s ease}
+@keyframes blurpulse{0%{filter:blur(0);transform:scale(.94)}50%{filter:blur(6px)}100%{filter:blur(0);transform:scale(1)}}
+body.has-modal-blur header,
+body.has-modal-blur main,
+body.has-modal-blur footer,
+body.has-modal-blur nav[aria-label="Navigasi bawah"],
+body.has-modal-blur #infobar{
+  filter:blur(5px);
+  pointer-events:none;
+  transition:filter .2s ease;
+}
+
+.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
+
+/* CSS JELAJAHI */
+.chip{display:inline-flex;align-items:center;border-radius:9999px;background:#EEF0E8;color:#374151;font-weight:500;transition:background .2s,color .2s,transform .15s}
+.chip:hover{background:#E1E6D3}
+.chip:active{transform:scale(.95)}
+.chip.on-dark{background:#12291C;color:#fff}
+.chip.on-moss{background:#7A9445;color:#fff}
+.chip.on-blue{background:#59789F;color:#fff}
+input[type=radio],input[type=checkbox]{accent-color:#12291C}
+.sheet-ov{opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+.sheet-ov.open{opacity:1;visibility:visible;transition:opacity .3s}
+.sheet-panel{transform:translateY(100%);transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.sheet-ov.open .sheet-panel{transform:none}
+
+/* CSS JUAL / CHAT / PROFIL / AUTH */
+.lbl{display:block;font-size:12px;font-weight:600;color:var(--dark);margin-bottom:8px}
+.inp{width:100%;height:44px;border-radius:12px;border:1px solid #E5E7EB;background:#fff;padding:0 16px;font-size:13px;color:#111827;outline:none;transition:border-color .2s}
+.inp::placeholder{color:#9CA3AF}
+.inp:focus{border-color:var(--glaucous)}
+.inp.pl{padding-left:44px}
+textarea.inp{height:88px;padding:12px 16px;resize:none}
+select.inp{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+[aria-invalid="true"]{border-color:#DC2626!important}
+.err{font-size:11px;color:#B91C1C;margin-top:6px}
+.stepdot{width:16px;height:16px;border-radius:9999px;background:#12291C;color:#fff;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+@media(max-width:767px){
+  #chatBox[data-m="list"] #chatThread{display:none}
+  #chatBox[data-m="thread"] #chatList{display:none}
+  /* ✏️ DIUBAH (revisi chat): di mobile, halaman Chat tampil penuh tanpa info bar & footer */
+  body[data-route="chat"] #infobar,
+  body[data-route="chat"] #footer{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+
+<body class="pb-[72px] md:pb-0">
+
+<!-- ============ NAVBAR (dipakai semua view) ============ -->
+<header id="top" class="sticky top-0 z-50 bg-dark text-white border-b border-white/10 shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
+  <div class="mx-auto max-w-[1280px] flex flex-wrap items-center gap-x-4 gap-y-2 px-4 md:px-6 py-2 md:py-0 md:h-16">
+    <a href="#/" id="logo" class="flex items-center gap-2 shrink-0 min-h-[44px]" aria-label="PINDAHIN AJA, kembali ke Home">
+      <img src="assets/logo/logo.png" alt="PINDAHIN Aja" class="h-9 w-auto"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span style="display:none" class="text-[11px] font-bold leading-tight">PINDAHIN<br>Aja</span>
+      <span class="leading-tight">
+        <span class="block text-[15px] font-extrabold tracking-tight">BIAR KAMI AJA</span>
+        <span class="block text-[11px] font-semibold text-[#A8CF5A]">PASAR KOS SURABAYA</span>
+      </span>
+    </a>
+
+    <form id="searchForm" class="relative order-last md:order-none w-full md:w-[380px] md:ml-2" autocomplete="off" role="search">
+      <div class="flex items-center gap-2 bg-white rounded-full h-10 px-4 shadow-sm">
+        <input id="q" type="text" class="flex-1 min-w-0 bg-transparent outline-none text-[13px] text-gray-800 placeholder-[#9CA3AF] truncate" placeholder="Lagi cari apa? Kipas kos, meja belajar..." aria-label="Cari barang">
+        <button type="submit" class="text-gray-400 hit press" aria-label="Cari"><i data-ic="search" data-s="16"></i></button>
+      </div>
+      <div id="sugg" class="hidden absolute left-0 right-0 top-12 bg-white text-gray-800 rounded-2xl shadow-xl border border-black/5 p-2 z-50"></div>
+    </form>
+
+    <div class="ml-auto flex items-center gap-1 md:gap-2">
+      <nav class="hidden md:flex items-center gap-1.5 xl:gap-2 text-[12px] xl:text-[13px] font-semibold">
+        <a href="#/" data-nav="home" class="header-nav-item active">Home</a>
+        <a href="#/jelajahi" data-nav="jelajahi" class="header-nav-item">Jelajahi</a>
+        <a href="#/jual" data-nav="jual" class="header-nav-item">Jual Barang</a>
+        <a href="#/wishlist" data-nav="wishlist" class="header-nav-item">Keranjang</a>
+        <a href="#/chat" data-nav="chat" class="header-nav-item">Chat</a>
+        <a href="#/profil" data-nav="profil" class="header-nav-item">Akun</a>
+      </nav>
+      <a href="#/wishlist" data-nav="wishlist" class="relative w-11 h-11 flex items-center justify-center press md:hidden" aria-label="Keranjang">
+        <i data-ic="cart" data-s="22"></i>
+        <span id="wishBadge" class="hidden absolute top-1.5 right-1 w-4 h-4 rounded-full bg-[#EF4444] text-[10px] leading-4 text-center font-semibold"></span>
+      </a>
+      <a href="#/chat" data-nav="chat" class="relative w-11 h-11 flex items-center justify-center press md:hidden" aria-label="Chat">
+        <i data-ic="message" data-s="22"></i>
+        <span id="chatDot" class="hidden absolute top-2 right-2 w-2 h-2 rounded-full bg-[#C6E03A]"></span>
+      </a>
+      <div class="relative">
+        <button id="acctBtn" data-nav="profil" class="w-11 h-11 flex items-center justify-center press" aria-label="Akun" aria-haspopup="menu" aria-expanded="false">
+          <span id="acctAv" class="w-8 h-8 rounded-full border border-white/70 flex items-center justify-center bg-moss text-[13px] font-bold"><i data-ic="user" data-s="18"></i></span>
+        </button>
+        <div id="acctMenu" role="menu" class="hidden absolute right-0 top-12 w-56 bg-white text-dark rounded-xl shadow-xl border border-black/5 py-1 z-50 text-[13px]"></div>
+      </div>
+      <button id="burger" class="md:hidden w-11 h-11 flex items-center justify-center press" aria-label="Menu" aria-expanded="false"><i data-ic="menu" data-s="24"></i></button>
+    </div>
+  </div>
+  <div id="mMenu" class="hidden md:hidden border-t border-white/10 px-4 pb-3 text-sm font-semibold">
+    <a class="block py-3" href="#/">Home</a>
+    <a class="block py-3" href="#/jelajahi">Jelajahi</a>
+    <a class="block py-3" href="#/jual">Jual Barang</a>
+    <a class="block py-3" href="#/wishlist">Keranjang</a>
+    <a class="block py-3" href="#/chat">Chat</a>
+    <a class="block py-3" href="pages/cara-jual.html">Cara Jual</a>
+    <a class="block py-3" href="pages/faq.html">FAQ</a>
+  </div>
+</header>
+
+<!-- ============ INFO BAR ============ -->
+<div id="infobar" class="bg-[#E4F0CA] text-[12px] overflow-x-auto no-scrollbar">
+  <div class="mx-auto max-w-[1280px] px-4 md:px-6 h-10 flex items-center justify-between gap-8 whitespace-nowrap min-w-max md:min-w-0">
+    <span class="inline-flex items-center gap-1.5 bg-[#CFE6A0] text-[#2F5233] font-semibold px-3 py-1 rounded-full"><i data-ic="sparkle" data-s="12"></i>Musim Pindahan Kos Surabaya</span>
+    <span class="inline-flex items-center gap-1.5 font-semibold text-[#1F2937]"><span class="text-orange-500"><i data-ic="flame" data-s="14"></i></span>Lebih dari <b class="font-extrabold">1.480+</b> barang kos aktif di sekitar UNAIR, ITS, UKWMS, PETRA &amp; UBAYA minggu ini!</span>
+    <span class="font-bold text-dark">COD Kampus Aman • Bebas Ongkir</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ╔══════════════════════════════════════════════╗
+     ║  VIEW: HOME  (#/)                            ║
+     ╚══════════════════════════════════════════════╝ -->
+<div id="view-home">
+
+<section class="mx-4 md:mx-6 mt-4">
+  <div class="mx-auto max-w-[1280px]">
+    <div id="hero" class="relative overflow-hidden rounded-3xl h-[240px] md:h-[320px] bg-dark shadow-[0_10px_30px_rgba(0,0,0,0.25)]" aria-roledescription="carousel" aria-label="Banner PINDAHIN AJA">
+      <div id="heroTrack" class="absolute inset-0"></div>
+      <button id="hPrev" class="hit hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/45 hover:bg-black/70 text-white items-center justify-center press z-10" aria-label="Slide sebelumnya"><i data-ic="chevL" data-s="14"></i></button>
+      <button id="hNext" class="hit hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/45 hover:bg-black/70 text-white items-center justify-center press z-10" aria-label="Slide berikutnya"><i data-ic="chevR" data-s="14"></i></button>
+      <div id="hDots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"></div>
+    </div>
+  </div>
+</section>
+
+<section id="pindahan" class="mt-6 py-10 overflow-x-clip" style="background:linear-gradient(180deg,#F8F8FC 0%,#EEEFF8 100%)">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-2">
+      <div>
+        <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-semibold bg-[#CFE6A0] text-[#2F5233] border border-[#2F5233]/15"><i data-ic="sparkle" data-s="10"></i>Edisi Pindahan Kilat</span>
+        <h2 class="mt-2 text-[24px] font-extrabold tracking-tight text-[#1E3A5F]">Kumpulan Barang Pindahan Siap Angkut</h2>
+        <p class="mt-1 text-[11px] text-[#6B7280]">Klik pada kartu untuk inspeksi kondisi barang, lokasi kampus, dan detail nego pemilik.</p>
+      </div>
+      <p class="hidden md:flex items-center gap-1.5 text-[10px] text-[#6B7280]"><span class="w-1.5 h-1.5 bg-[#C6E03A]"></span>Interaktif: Klik kartu untuk mengangkat</p>
+    </div>
+    <div id="fan" class="fan mt-6" aria-label="Kartu barang pindahan"></div>
+    <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3" id="features"></div>
+  </div>
+</section>
+
+<section id="pilihan" class="bg-page py-10 overflow-x-clip">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="serif text-[28px] font-semibold text-dark">Barang pilihan hari ini</h2>
+        <p class="mt-2 text-[12px] text-[#9AA3B5]">Klik kartu untuk lihat detail. Cocok banget buat kos kamu.</p>
+      </div>
+      <a href="#/jelajahi" class="text-[12px] text-glaucous hover:underline whitespace-nowrap min-h-[44px] inline-flex items-center">Lihat semua →</a>
+    </div>
+    <div id="stack" class="stack mt-6"></div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6">
+    <h2 class="serif text-[26px] font-semibold text-dark">Lagi cari apa?</h2>
+    <div id="cats" class="mt-6 flex md:grid md:grid-cols-6 gap-3 md:gap-4 overflow-x-auto no-scrollbar snap-x -mx-4 px-4 md:mx-0 md:px-0"></div>
+  </div>
+</section>
+
+<section id="kampus" class="bg-page">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6 py-10">
+    <p class="text-[9px] uppercase tracking-[0.08em] font-semibold text-[#6B7280]">Jelajah berdasarkan kampus</p>
+    <h2 class="mt-1 text-[24px] font-extrabold tracking-tight text-[#14261C]">Pindahin dari kampus mana?</h2>
+    <p class="mt-2 max-w-[420px] text-[11px] leading-relaxed text-[#6B7280]">Cari barang di sekitar kampusmu — biar gampang ketemuan atau COD-an tanpa ongkir mahal. Cukup jalan kaki atau motoran 5 menit.</p>
+    <div id="campusGrid" class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3"></div>
+  </div>
+</section>
+
+<section id="baru" class="py-10">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6">
+    <div class="flex items-center justify-between gap-4">
+      <h2 class="serif text-[26px] font-semibold text-dark">Baru aja dipindahin 👀</h2>
+      <a href="#/jelajahi" class="text-[12px] text-glaucous hover:underline whitespace-nowrap min-h-[44px] inline-flex items-center">Lihat semua →</a>
+    </div>
+    <div id="filterInfo" class="hidden mt-3 items-center gap-2 text-[12px] text-[#374151]">
+      <span>Menampilkan barang dari <b id="filterName"></b></span>
+      <button id="filterReset" class="underline text-glaucous min-h-[44px]">Reset</button>
+    </div>
+    <div id="products" class="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+    <p id="emptyP" class="hidden mt-6 text-sm text-[#6B7280]">Belum ada barang dari kampus ini. Siapa tahu besok ada yang pindahin.</p>
+  </div>
+</section>
+
+<section class="bg-page pt-12 pb-10">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6">
+    <h2 class="serif text-[28px] font-semibold text-dark max-w-[420px] leading-tight">Anak kampus juga pindah-pindahin barang.</h2>
+    <p class="mt-2 text-[12px] text-[#9AA3B5]">Cerita dari mahasiswa yang sudah pindahin barang mereka.</p>
+    <div class="mt-8 grid md:grid-cols-3 gap-4 items-start">
+      <figure class="reveal bg-white rounded-2xl p-6 shadow-sm">
+        <blockquote class="serif italic text-[14px] leading-relaxed text-dark">"Pas pindah kos, daripada meja dibuang mending aku jual ke anak kampus yang lain. Terjual 3 hari!"</blockquote>
+        <figcaption class="mt-5 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-moss text-white text-sm font-bold flex items-center justify-center">N</span><span class="text-[12px]"><b class="block font-semibold">Naya</b><span class="text-[#9AA3B5] text-[10px]">UKWMS</span></span></figcaption>
+      </figure>
+      <figure class="reveal bg-white rounded-2xl p-6 shadow-sm md:mt-6">
+        <blockquote class="serif italic text-[14px] leading-relaxed text-dark">"Cari rice cooker bekas ternyata ada yang jual dekat kampus. Tinggal COD, langsung jadi."</blockquote>
+        <figcaption class="mt-5 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-glaucous text-white text-sm font-bold flex items-center justify-center">R</span><span class="text-[12px]"><b class="block font-semibold">Raka</b><span class="text-[#9AA3B5] text-[10px]">UNAIR</span></span></figcaption>
+      </figure>
+      <figure class="reveal bg-white rounded-2xl p-6 shadow-sm md:mt-1">
+        <blockquote class="serif italic text-[14px] leading-relaxed text-dark">"Lulus tapi barang-barang kos masih banyak. Habis terjual semua lewat Pindahin Aja."</blockquote>
+        <figcaption class="mt-5 flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-powder text-white text-sm font-bold flex items-center justify-center">S</span><span class="text-[12px]"><b class="block font-semibold">Sari</b><span class="text-[#9AA3B5] text-[10px]">PETRA</span></span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="bg-page pb-14">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6">
+    <div class="bg-white rounded-3xl px-6 py-8 md:px-12 md:py-10 border border-black/[0.04] shadow-[0_4px_20px_rgba(30,58,95,0.06)] grid lg:grid-cols-[1.1fr_1fr] gap-10 items-center">
+      <div class="reveal order-2 lg:order-1">
+        <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] font-bold bg-[#D8EDA8] text-[#12291C]"><i data-ic="truck" data-s="11"></i>Cerita Anak Kos Surabaya</span>
+        <h2 class="mt-4 text-[24px] md:text-[30px] leading-[1.1] font-extrabold tracking-tight text-[#12291C]">Mau pindah kos? Nggak semua barang harus ikut pindahan.</h2>
+        <p class="mt-4 max-w-[400px] text-[12px] leading-relaxed text-[#374151]">Kalau masih bagus, pindahin aja ke orang yang lebih butuh. Kardus pindahan jadi enteng, kamar kos baru nggak sesak, dan dompet kamu nambah uang saku buat jajan di kantin kampus.</p>
+        <ol class="mt-4 space-y-2.5 text-[10.5px] text-[#374151]">
+          <li class="flex items-center gap-2.5"><span class="w-4 h-4 shrink-0 rounded-full bg-[#D8EDA8] text-[#2F5233] text-[8px] font-bold flex items-center justify-center">1</span><span><b class="text-[#12291C]">Foto barang kosmu</b> yang masih layak pakai dalam 30 detik.</span></li>
+          <li class="flex items-center gap-2.5"><span class="w-4 h-4 shrink-0 rounded-full bg-[#D8EDA8] text-[#2F5233] text-[8px] font-bold flex items-center justify-center">2</span><span><b class="text-[#12291C]">Pasang harga ramah mahasiswa</b> dan tentukan titik temu kampus.</span></li>
+          <!-- Brief terbaru menyebut komisi 4%. Ganti kalimat ini kalau mau ikut brief. -->
+          <li class="flex items-center gap-2.5"><span class="w-4 h-4 shrink-0 rounded-full bg-[#D8EDA8] text-[#2F5233] text-[8px] font-bold flex items-center justify-center">3</span><span><b class="text-[#12291C]">Deal langsung sama adik tingkat atau tetangga kos.</b> Tanpa potongan admin komisi.</span></li>
+        </ol>
+        <div class="mt-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+          <a href="#/jual" class="inline-flex items-center justify-center gap-2 bg-glaucous hover:bg-[#6a89b0] hover:-translate-y-0.5 text-white text-[11px] font-bold px-5 min-h-[44px] rounded-xl shadow-md shadow-glaucous/30 transition duration-200 press"><i data-ic="upload" data-s="14"></i>Jual Barang Sekarang</a>
+          <a href="pages/keamanan.html" class="text-center sm:text-left text-[10.5px] font-semibold text-[#3F5F1A] hover:underline min-h-[44px] inline-flex items-center justify-center">Lihat Panduan COD Aman Mahasiswa →</a>
+        </div>
+      </div>
+      <div class="reveal-img order-1 lg:order-2 relative rounded-[18px] overflow-hidden h-[200px] lg:h-[215px] shadow-[0_16px_32px_rgba(0,0,0,0.22)] bg-powder">
+        <img src="assets/img/kamar-kos.jpg" alt="Kamar kos yang terang" class="w-full h-full object-cover" style="filter:saturate(1.05) sepia(.08)" onerror="this.remove()">
+        <div id="testi" class="absolute bottom-3 left-3 right-3 bg-white/90 backdrop-blur-md rounded-xl px-3 py-2.5 flex items-center gap-2.5 shadow-md transition-opacity duration-300">
+          <span id="tAv" class="w-[22px] h-[22px] rounded-full bg-[#D8EDA8] text-[#2F5233] text-[8px] font-bold flex items-center justify-center shrink-0">AJ</span>
+          <span><b id="tQ" class="block text-[9px] text-[#12291C]"></b><span id="tW" class="block text-[8px] text-[#6B7280]"></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /view-home -->
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: PRODUK  (#/produk)                           ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-produk" class="hidden detail-page">
+  <section class="mx-auto max-w-[1200px] px-4 md:px-6 pt-6 pb-16">
+    <div class="mb-5"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+    <div id="detailPage" class="detail-card rounded-[28px] bg-white overflow-hidden"></div>
+  </section>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: JELAJAHI  (#/jelajahi)                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-jelajahi" class="hidden">
+  <section class="mx-auto max-w-[1100px] px-4 md:px-6 pt-6 pb-14">
+    <div class="mb-4"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+    <h1 class="sr-only">Jelajahi barang</h1>
+    <form id="jForm" class="relative" role="search" autocomplete="off">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9AA3D5] pointer-events-none"><i data-ic="search" data-s="16"></i></span>
+      <input id="jq" type="search" placeholder="Cari barang, kategori, atau kampus…" aria-label="Cari barang, kategori, atau kampus"
+             class="w-full h-11 rounded-full bg-[#F6F4EA] border border-[#E8E4D0] pl-11 pr-4 text-[13px] text-gray-800 placeholder-[#9CA3AF] outline-none focus:border-glaucous focus:bg-white transition">
+    </form>
+    <div class="mt-6 grid lg:grid-cols-[190px_minmax(0,1fr)] gap-x-7 gap-y-4 items-start">
+      <aside class="hidden lg:block" aria-label="Filter"><div id="filterDesk"></div></aside>
+      <div class="min-w-0">
+        <div class="flex items-center justify-between gap-3">
+          <p id="jCount" class="text-[12px] text-[#6B7280]" aria-live="polite"></p>
+          <div class="flex items-center gap-2">
+            <button id="fOpen" type="button" class="lg:hidden inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 min-h-[44px] text-[12px] font-semibold text-dark press">
+              <i data-ic="filter" data-s="16"></i>Filter<span id="fBadge" class="hidden min-w-[18px] h-[18px] px-1 rounded-full bg-glaucous text-white text-[10px] leading-[18px] text-center"></span>
+            </button>
+            <div class="relative">
+              <select id="jSort" aria-label="Urutkan" class="appearance-none bg-white border border-black/10 rounded-full pl-4 pr-9 min-h-[44px] lg:min-h-[34px] text-[12px] lg:text-[11px] text-dark outline-none focus:border-glaucous cursor-pointer">
+                <option value="baru">Terbaru</option>
+                <option value="murah">Termurah</option>
+                <option value="mahal">Termahal</option>
+              </select>
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#6B7280]"><i data-ic="chevD" data-s="14"></i></span>
+            </div>
+          </div>
+        </div>
+        <div id="jProducts" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+        <div id="jEmpty" class="hidden mt-10 text-center py-10">
+          <p class="serif text-[22px] font-semibold text-dark">Belum ada yang cocok.</p>
+          <p class="mt-2 text-[13px] text-[#6B7280]">Coba longgarin filter atau ganti kata kunci. Siapa tahu besok ada yang pindahin.</p>
+          <button data-reset class="mt-5 bg-glaucous text-white font-bold text-[13px] px-6 min-h-[44px] rounded-xl press">Reset semua</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: JUAL  (#/jual)                                ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-jual" class="hidden">
+  <section class="mx-auto max-w-[540px] px-4 md:px-0 pt-10 pb-20">
+    <div class="mb-4"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+
+    <!-- langkah 1: form -->
+    <div id="jualForm">
+      <h1 class="serif text-[30px] font-semibold text-dark leading-tight">Mau pindahin barang?</h1>
+      <p class="mt-2 text-[12px] text-[#9AA3B5]">Foto → kasih harga → pilih kampus → selesai.</p>
+
+      <div class="mt-5 flex items-center gap-2 text-[10px] text-[#9AA3B5]" aria-label="Langkah">
+        <button type="button" data-go="fFoto" class="inline-flex items-center gap-1.5 min-h-[44px]"><span class="stepdot">1</span>Info Barang</button>
+        <span class="w-4 border-t border-dotted border-[#C9CEDB]"></span>
+        <button type="button" data-go="fHarga" class="inline-flex items-center gap-1.5 min-h-[44px]"><span class="stepdot">2</span>Harga &amp; Kondisi</button>
+        <span class="w-4 border-t border-dotted border-[#C9CEDB]"></span>
+        <button type="button" data-go="fKampus" class="inline-flex items-center gap-1.5 min-h-[44px]"><span class="stepdot">3</span>Lokasi &amp; Transaksi</button>
+      </div>
+
+      <div id="fFoto" class="mt-4">
+        <span class="lbl">Foto barang</span>
+        <div id="dz" role="button" tabindex="0" aria-label="Upload foto barang" class="h-[130px] rounded-2xl border-2 border-dashed border-[#D9D5C0] bg-[#F6F4EA] flex flex-col items-center justify-center text-center cursor-pointer hover:border-glaucous transition">
+          <span class="text-[#9AA3B5]"><i data-ic="camera" data-s="26"></i></span>
+          <p class="mt-2 text-[12px] font-medium text-[#9AA3B5]">Upload foto barang kamu</p>
+          <p class="mt-1 text-[10px] text-[#B3B8C6]">Maks. 5 foto, JPG/PNG</p>
+        </div>
+        <input id="photoIn" type="file" accept="image/jpeg,image/png" multiple class="hidden">
+        <div id="thumbs" class="mt-3 grid grid-cols-5 gap-2"></div>
+      </div>
+
+      <div class="mt-6">
+        <label class="lbl" for="jName">Nama barang</label>
+        <input id="jName" class="inp" maxlength="60" placeholder="Contoh: Kipas Angin Cosmos, Meja Belajar...">
+      </div>
+      <div class="mt-6"><span class="lbl">Kategori</span><div id="jCat" class="flex flex-wrap gap-2"></div></div>
+      <div id="fHarga" class="mt-6">
+        <label class="lbl" for="jPrice">Harga</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[13px] font-semibold text-[#9AA3B5]">Rp</span>
+          <input id="jPrice" class="inp pl" inputmode="numeric" maxlength="9" placeholder="75000">
+        </div>
+      </div>
+      <div class="mt-6"><span class="lbl">Kondisi</span><div id="jCond" class="flex flex-wrap gap-2"></div></div>
+      <div class="mt-6">
+        <label class="lbl" for="jDesc">Deskripsi</label>
+        <textarea id="jDesc" class="inp" maxlength="500" placeholder="Ceritain kondisi barang, alasan jual, kekurangan kalau ada..."></textarea>
+      </div>
+      <div id="fKampus" class="mt-6"><span class="lbl">Kampus</span><div id="jCampus" class="flex flex-wrap gap-2"></div></div>
+      <div class="mt-6">
+        <label class="lbl" for="jMeet">Lokasi meet-up</label>
+        <input id="jMeet" class="inp" maxlength="80" placeholder="Contoh: Lobby kampus, Indomaret depan kampus...">
+      </div>
+      <div class="mt-6"><span class="lbl">Bisa nego?</span><div id="jNego" class="flex gap-2"></div></div>
+      <div class="mt-6"><span class="lbl">Metode transaksi</span><div id="jTx" class="flex flex-wrap gap-2"></div></div>
+
+      <button id="jNext" type="button" disabled class="mt-8 w-full min-h-[48px] rounded-full bg-[#C5CAD1] text-white text-[13px] font-bold cursor-not-allowed transition">Lanjut → Preview Listing</button>
+      <p id="jHint" class="mt-3 text-center text-[11px] text-[#9AA3B5]"></p>
+    </div>
+
+    <!-- langkah 2: preview -->
+    <div id="jualPrev" class="hidden">
+      <button id="pvBack" type="button" class="inline-flex items-center gap-2 text-[12px] font-semibold text-glaucous min-h-[44px]"><i data-ic="arrowL" data-s="16"></i>Kembali edit</button>
+      <h1 class="serif text-[30px] font-semibold text-dark leading-tight mt-2">Preview listing</h1>
+      <p class="mt-2 text-[12px] text-[#9AA3B5]">Begini barangmu bakal tampil di Jelajahi.</p>
+      <div class="mt-6 grid sm:grid-cols-[210px_minmax(0,1fr)] gap-6 items-start">
+        <div id="pvCard"></div>
+        <dl id="pvInfo" class="text-[12px] space-y-2.5"></dl>
+      </div>
+      <div class="mt-6 rounded-2xl bg-[#F6F4EA] border border-[#E8E4D0] p-4 text-[12px] space-y-2">
+        <div class="flex justify-between"><span class="text-[#6B7280]">Harga barang</span><b id="pvPrice"></b></div>
+        <div class="flex justify-between"><span class="text-[#6B7280]">Komisi listing 4%</span><b id="pvFee"></b></div>
+        <p class="text-[10px] text-[#9AA3B5]">Komisi dibayar penjual sekali saat barang tayang. Pembayaran di prototipe ini cuma simulasi.</p>
+      </div>
+      <label class="mt-4 flex items-start gap-3 text-[12px] text-[#374151] cursor-pointer min-h-[44px]">
+        <input id="pvAgree" type="checkbox" class="mt-0.5 w-5 h-5 shrink-0">Aku paham komisi 4% dibayar saat listing, dan platform cuma jadi pihak ketiga antara penjual dan pembeli.
+      </label>
+      <button id="pvPublish" type="button" class="mt-5 w-full min-h-[48px] rounded-full bg-glaucous hover:bg-[#6a89b0] text-white text-[13px] font-bold press">Pindahin Barang</button>
+    </div>
+  </section>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: WISHLIST  (#/wishlist)                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-wishlist" class="hidden">
+  <section class="mx-auto max-w-[720px] px-4 md:px-6 pt-10 pb-20 min-h-[60vh]">
+    <div class="mb-4"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="serif text-[28px] font-semibold text-dark leading-tight">Barang yang kamu simpan.</h1>
+        <p id="wSub" class="mt-1 text-[12px] text-[#9AA3B5]"></p>
+      </div>
+      <button id="wClear" class="hidden text-[11px] text-[#9AA3B5] hover:text-dark min-h-[44px] px-1">Hapus semua</button>
+    </div>
+    <div id="wGrid" class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+    <div id="wEmpty" class="hidden text-center py-16">
+      <span class="text-[#C9CEDB] inline-block"><i data-ic="cart" data-s="44"></i></span>
+      <p class="serif text-[24px] font-semibold text-dark mt-3">Belum ada yang disimpan.</p>
+      <p class="mt-2 text-[13px] text-[#6B7280]">Siapa tahu besok tiba-tiba butuh.</p>
+      <a href="#/jelajahi" class="inline-flex items-center justify-center mt-6 bg-glaucous hover:bg-[#6a89b0] text-white font-bold text-[13px] px-7 min-h-[44px] rounded-xl press">Cari Barang</a>
+    </div>
+  </section>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: CHAT  (#/chat)                                ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-chat" class="hidden">
+  <section class="mx-auto max-w-[800px] md:px-4 md:pt-6 md:pb-14">
+    <div class="px-4 md:px-0 mb-3"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+    <div id="chatBox" data-m="list" class="bg-white md:rounded-2xl md:border md:border-black/5 md:shadow-sm overflow-hidden grid md:grid-cols-[200px_minmax(0,1fr)] h-[calc(100dvh-130px)] md:h-[600px] md:max-h-[calc(100dvh-112px)] min-h-[480px]">
+
+      <aside id="chatList" class="bg-[#F6F4EA] md:border-r border-black/5 overflow-y-auto min-h-0">
+        <h1 class="px-4 py-4 text-[13px] font-bold text-dark">Chat</h1>
+        <div id="roomList"></div>
+      </aside>
+
+      <div id="chatThread" class="flex flex-col min-h-0 min-w-0">
+        <div id="chatEmpty" class="hidden flex-1 flex-col items-center justify-center text-center px-6">
+          <span class="text-[#C9CEDB]"><i data-ic="message" data-s="40"></i></span>
+          <p class="serif text-[20px] font-semibold text-dark mt-3">Pilih chat dulu.</p>
+          <p class="mt-1 text-[12px] text-[#6B7280]">Buka barang lalu klik "Chat Penjual" buat mulai nego.</p>
+        </div>
+
+        <div id="threadBody" class="hidden flex-col flex-1 min-h-0">
+          <div class="flex items-center gap-3 px-4 py-3 border-b border-black/5">
+            <button id="thBack" class="md:hidden w-11 h-11 -ml-2 flex items-center justify-center press" aria-label="Kembali ke daftar chat"><i data-ic="arrowL" data-s="20"></i></button>
+            <span id="thAv" class="w-9 h-9 rounded-full text-white text-[13px] font-bold flex items-center justify-center shrink-0"></span>
+            <div class="min-w-0"><b id="thName" class="block text-[13px] text-dark truncate"></b><span id="thMeta" class="text-[10px] text-[#9AA3B5]"></span></div>
+          </div>
+          <div id="thProd" class="mx-3 mt-3 flex items-center gap-3 rounded-xl bg-[#EEF1F7] border border-[#E1E6F2] px-3 py-2"></div>
+          <div id="msgs" class="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-3" aria-live="polite"></div>
+
+          <div class="border-t border-black/5">
+            <button id="hoToggle" class="w-full flex items-center justify-between px-4 min-h-[44px] text-[11px] text-glaucous font-medium" aria-expanded="false">
+              <span class="inline-flex items-center gap-2"><i data-ic="package" data-s="14"></i>Metode Serah Terima</span>
+              <span class="inline-flex items-center gap-2"><span id="hoStatus" class="rounded-full bg-[#EEF0E8] text-[#374151] text-[9px] font-semibold px-2 py-0.5"></span><span id="hoChev" class="transition-transform"><i data-ic="chevD" data-s="14"></i></span></span>
+            </button>
+            <div id="hoBody" class="hidden px-4 pb-4 max-h-[46vh] overflow-y-auto"></div>
+          </div>
+
+          <form id="msgForm" class="flex items-center gap-2 px-3 py-3 border-t border-black/5" autocomplete="off">
+            <!-- ✏️ DIUBAH (revisi chat): chip Tawar Harga krem + border + teks olive -->
+            <button type="button" id="tawar" class="shrink-0 rounded-full bg-[#F6F4EA] hover:bg-[#EDEAD8] border border-[#D9D5C0] text-[#5E7A2E] text-[11px] font-bold px-3.5 min-h-[44px] press">Tawar Harga</button>
+            <input id="msgIn" class="flex-1 min-w-0 h-11 rounded-full bg-[#F6F4EA] border border-[#E8E4D0] px-4 text-[13px] outline-none focus:border-glaucous" placeholder="Tanya penjual…" maxlength="500" aria-label="Tulis pesan">
+            <button id="msgSend" type="submit" class="shrink-0 w-11 h-11 rounded-full bg-[#C5CAD1] text-white flex items-center justify-center transition" aria-label="Kirim" disabled><i data-ic="send" data-s="16"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: PROFIL  (#/profil)                            ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-profil" class="hidden">
+  <section class="mx-auto max-w-[800px] px-4 md:px-6 pt-8 pb-20">
+    <div class="mb-4"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+    <div class="rounded-2xl bg-[#F6F4EA] border border-[#E8E4D0] p-5 md:p-6">
+      <div class="flex items-start gap-4 md:gap-5">
+        <span id="pAv" class="w-16 h-16 shrink-0 rounded-full bg-dark text-white text-[26px] font-bold flex items-center justify-center"></span>
+        <div class="min-w-0 flex-1">
+          <h1 id="pName" class="serif text-[22px] font-semibold text-dark leading-tight truncate"></h1>
+          <p id="pMeta" class="text-[12px] text-[#9AA3B5] truncate"></p>
+          <p id="pRate" class="mt-1 text-[12px]"></p>
+          <p id="pBio" class="mt-2 text-[12px] text-[#374151] hidden"></p>
+        </div>
+        <button id="pEdit" class="shrink-0 rounded-full border border-black/15 bg-white hover:bg-[#F6F4EA] text-[12px] font-semibold text-dark px-4 min-h-[44px] press">Edit Profil</button>
+      </div>
+      <div class="mt-4 flex gap-8" id="pStats"></div>
+    </div>
+
+    <div role="tablist" aria-label="Tab profil" class="mt-5 grid grid-cols-5 gap-1 bg-[#F3F3F5] rounded-xl p-1">
+      <button role="tab" data-ptab="dijual" class="min-h-[44px] rounded-lg text-[12px] font-semibold transition">Dijual</button>
+      <button role="tab" data-ptab="terjual" class="min-h-[44px] rounded-lg text-[12px] font-semibold transition">Terjual</button>
+      <button role="tab" data-ptab="disimpan" class="min-h-[44px] rounded-lg text-[12px] font-semibold transition">Disimpan</button>
+      <button role="tab" data-ptab="pembelian" class="min-h-[44px] rounded-lg text-[12px] font-semibold transition">Pembelian</button>
+      <button role="tab" data-ptab="ulasan" class="min-h-[44px] rounded-lg text-[12px] font-semibold transition">Ulasan</button>
+    </div>
+    <div id="pGrid" class="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+    <div id="pOther" class="mt-5"></div>
+  </section>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: MASUK  (#/masuk)                              ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-masuk" class="hidden">
+  <section class="mx-auto max-w-[420px] px-4 pt-12 pb-20">
+    <div class="mb-4"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+    <h1 class="serif text-[32px] font-semibold text-dark leading-tight">Balik lagi?</h1>
+    <p class="mt-2 text-[13px] text-[#6B7280]">Masuk buat lanjut cari atau pindahin barang.</p>
+    <form id="loginForm" class="mt-8 space-y-5" novalidate>
+      <div>
+        <label class="lbl" for="lId">Email / Username</label>
+        <input id="lId" class="inp" autocomplete="username" placeholder="contoh: naya_ukwms">
+        <p data-err="lId" class="err hidden"></p>
+      </div>
+      <div>
+        <label class="lbl" for="lPw">Password</label>
+        <div class="relative">
+          <input id="lPw" type="password" class="inp pr-12" autocomplete="current-password" placeholder="Password kamu">
+          <button type="button" data-eye="lPw" class="absolute right-0 top-0 w-11 h-11 flex items-center justify-center text-[#6B7280]" aria-label="Tampilkan password"></button>
+        </div>
+        <p data-err="lPw" class="err hidden"></p>
+      </div>
+      <p data-err="lForm" class="err hidden" role="alert"></p>
+      <button id="lSubmit" type="submit" class="w-full min-h-[48px] rounded-xl bg-glaucous hover:bg-[#6a89b0] text-white text-[14px] font-bold press">Masuk</button>
+      <div class="flex items-center gap-3 text-[11px] text-[#9AA3B5]"><span class="flex-1 border-t border-black/10"></span>atau<span class="flex-1 border-t border-black/10"></span></div>
+      <button type="button" data-google class="w-full min-h-[48px] rounded-xl border border-black/15 bg-white hover:bg-[#F6F4EA] text-[13px] font-semibold text-dark inline-flex items-center justify-center gap-2 press"><span class="w-5 h-5 rounded-full bg-[#EEF0FB] text-[11px] font-extrabold text-glaucous flex items-center justify-center">G</span>Continue with Google</button>
+      <p class="text-center text-[12px] text-[#6B7280]">Belum punya akun? <a id="toDaftar" href="#/daftar" class="font-bold text-glaucous hover:underline">Daftar</a></p>
+    </form>
+    <div class="mt-8 rounded-xl bg-[#F6F4EA] border border-[#E8E4D0] p-4 text-[11px] text-[#6B7280]">
+      Coba akun demo atau buat akun baru sendiri. Demo hanya untuk mencoba; siapa pun bisa mendaftar.
+      <button type="button" id="demoFill" class="ml-1 font-bold text-glaucous hover:underline min-h-[44px]">Isi otomatis demo</button>
+    </div>
+  </section>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  VIEW: DAFTAR  (#/daftar)                            ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="view-daftar" class="hidden">
+  <section class="mx-auto max-w-[420px] px-4 pt-12 pb-20">
+    <div class="mb-4"><button type="button" class="back-btn" data-back="true">← Kembali</button></div>
+    <h1 class="serif text-[32px] font-semibold text-dark leading-tight">Yuk, gabung.</h1>
+    <p class="mt-2 text-[13px] text-[#6B7280]">Biar barangmu bisa pindah ke mahasiswa yang membutuhkan.</p>
+    <form id="regForm" class="mt-8 space-y-5" novalidate>
+      <div><label class="lbl" for="rName">Nama</label><input id="rName" class="inp" autocomplete="name" maxlength="40" placeholder="Nama lengkap"><p data-err="rName" class="err hidden"></p></div>
+      <div><label class="lbl" for="rUser">Username</label><input id="rUser" class="inp" autocomplete="username" maxlength="20" placeholder="huruf kecil, angka, underscore"><p data-err="rUser" class="err hidden"></p></div>
+      <div><label class="lbl" for="rEmail">Email</label><input id="rEmail" type="email" class="inp" autocomplete="email" placeholder="nama@email.com"><p data-err="rEmail" class="err hidden"></p></div>
+      <div>
+        <label class="lbl" for="rPw">Password</label>
+        <div class="relative">
+          <input id="rPw" type="password" class="inp pr-12" autocomplete="new-password" placeholder="Minimal 8 karakter">
+          <button type="button" data-eye="rPw" class="absolute right-0 top-0 w-11 h-11 flex items-center justify-center text-[#6B7280]" aria-label="Tampilkan password"></button>
+        </div>
+        <p data-err="rPw" class="err hidden"></p>
+      </div>
+      <div><label class="lbl" for="rCampus">Kampus</label><select id="rCampus" class="inp"></select><p data-err="rCampus" class="err hidden"></p></div>
+      <div><label class="lbl" for="rWa">WhatsApp</label><input id="rWa" type="tel" inputmode="tel" class="inp" autocomplete="tel" maxlength="16" placeholder="08xxxxxxxxxx"><p data-err="rWa" class="err hidden"></p></div>
+      <p data-err="rForm" class="err hidden" role="alert"></p>
+      <button id="rSubmit" type="submit" class="w-full min-h-[48px] rounded-xl bg-glaucous hover:bg-[#6a89b0] text-white text-[14px] font-bold press">Buat Akun</button>
+      <p class="text-center text-[12px] text-[#6B7280]">Udah punya akun? <a id="toMasuk" href="#/masuk" class="font-bold text-glaucous hover:underline">Masuk</a></p>
+    </form>
+  </section>
+</div>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer id="footer" class="bg-dark text-white">
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6 py-10 grid md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-8">
+    <div>
+      <img src="assets/logo/logo.png" alt="PINDAHIN Aja" class="h-12 w-auto" onerror="this.outerHTML='<b class=&quot;text-lg&quot;>PINDAHIN Aja</b>'">
+      <p class="mt-4 text-[13px] leading-relaxed text-[#A8CF5A] max-w-[300px]">Barang nggak kepakai? Pindahin aja.<br>Marketplace preloved khusus mahasiswa dan anak kos Surabaya.</p>
+      <div class="mt-5 flex gap-3">
+        <a href="#" aria-label="X" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-[10px] font-bold flex items-center justify-center press">X</a>
+        <a href="#" aria-label="Instagram" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-[10px] font-bold flex items-center justify-center press">IG</a>
+        <a href="#" aria-label="TikTok" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-[10px] font-bold flex items-center justify-center press">TT</a>
+        <a href="#" aria-label="WhatsApp" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-[10px] font-bold flex items-center justify-center press">WA</a>
+      </div>
+    </div>
+    <div class="text-[13px]"><h3 class="font-bold text-vanilla mb-3">Jelajahi</h3>
+      <ul class="space-y-1 text-[#A8CF5A]">
+        <li><a class="block py-1.5 hover:text-white" href="#/jelajahi">Semua Barang</a></li>
+        <li><a class="block py-1.5 hover:text-white" href="#/jelajahi">Kategori</a></li>
+        <li><a class="block py-1.5 hover:text-white" href="#/home/kampus">Kampus</a></li>
+      </ul></div>
+    <div class="text-[13px]"><h3 class="font-bold text-vanilla mb-3">Jual</h3>
+      <ul class="space-y-1 text-[#A8CF5A]"><li><a class="block py-1.5 hover:text-white" href="#/jual">Jual Barang</a></li><li><a class="block py-1.5 hover:text-white" href="pages/cara-jual.html">Cara Jual</a></li></ul></div>
+    <div class="text-[13px]"><h3 class="font-bold text-vanilla mb-3">Bantuan</h3>
+      <ul class="space-y-1 text-[#A8CF5A]"><li><a class="block py-1.5 hover:text-white" href="pages/faq.html">FAQ</a></li><li><a class="block py-1.5 hover:text-white" href="pages/keamanan.html">Keamanan</a></li><li><a class="block py-1.5 hover:text-white" href="pages/hubungi.html">Hubungi Kami</a></li></ul>
+      <h3 class="font-bold text-vanilla mt-4 mb-3">Legal</h3>
+      <ul class="text-[#A8CF5A]"><li><a class="block py-1.5 hover:text-white" href="pages/legal.html">Syarat &amp; Privasi</a></li></ul></div>
+  </div>
+  <div class="mx-auto max-w-[1100px] px-4 md:px-6 border-t border-white/10 py-5 flex flex-col sm:flex-row justify-between gap-2 text-[11px] text-[#7A9445]">
+    <span>© <span id="yr"></span> PINDAHIN AJA. Dibuat dengan ♥ untuk mahasiswa Surabaya.</span>
+    <span>Made in Surabaya</span>
+  </div>
+</footer>
+
+<!-- ============ BOTTOM NAV (MOBILE) ============ -->
+<nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-black/10 grid grid-cols-5 text-[10px] font-semibold text-[#6B7280]" aria-label="Navigasi bawah">
+  <a href="#/" data-bnav="home" class="min-h-[56px] flex flex-col items-center justify-center gap-0.5 text-dark"><i data-ic="home" data-s="22"></i>Home</a>
+  <a href="#/jelajahi" data-bnav="jelajahi" class="min-h-[56px] flex flex-col items-center justify-center gap-0.5"><i data-ic="search" data-s="22"></i>Search</a>
+  <a href="#/jual" class="min-h-[56px] flex flex-col items-center justify-center gap-0.5 text-glaucous"><span class="w-9 h-9 -mt-4 rounded-full bg-glaucous text-white flex items-center justify-center shadow-md"><i data-ic="plus" data-s="22"></i></span>Jual</a>
+  <a href="#/wishlist" data-bnav="wishlist" class="min-h-[56px] flex flex-col items-center justify-center gap-0.5"><i data-ic="cart" data-s="22"></i>Wishlist</a>
+  <a href="#/profil" data-bnav="profil" class="min-h-[56px] flex flex-col items-center justify-center gap-0.5"><i data-ic="user" data-s="22"></i>Profil</a>
+</nav>
+
+<!-- ============ MODAL DETAIL ============ -->
+<div id="modal" class="fixed inset-0 z-[60] hidden items-end md:items-center justify-center bg-black/50 md:p-6" role="dialog" aria-modal="true" aria-label="Detail barang">
+  <div class="bg-white w-full md:max-w-[720px] rounded-t-3xl md:rounded-3xl overflow-hidden grid md:grid-cols-2 max-h-[90vh] overflow-y-auto">
+    <img id="mImg" alt="" class="w-full h-56 md:h-full object-cover bg-powder">
+    <div class="p-6 flex flex-col gap-2">
+      <div class="flex items-center justify-between">
+        <span id="mCond" class="text-[10px] font-semibold px-2.5 py-1 rounded-full"></span>
+        <button id="mClose" class="w-11 h-11 -mr-3 flex items-center justify-center press" aria-label="Tutup"><i data-ic="x" data-s="20"></i></button>
+      </div>
+      <h3 id="mName" class="text-xl font-extrabold text-dark"></h3>
+      <p id="mPrice" class="serif text-xl font-semibold text-glaucous"></p>
+      <p id="mMeta" class="text-[12px] text-[#374151]"></p>
+      <p id="mSeller" class="text-[12px] text-[#6B7280]"></p>
+      <p class="text-[12px] text-[#374151] mt-1">Titik temu mengikuti lokasi penjual. Cek barang langsung sebelum bayar.</p>
+      <div class="mt-4 grid grid-cols-3 gap-2">
+        <button id="mBuy" class="min-h-[44px] bg-glaucous text-white font-bold text-sm rounded-xl press">Beli</button>
+        <button id="mChat" class="min-h-[44px] bg-[#EEF0FB] text-dark font-bold text-sm rounded-xl press">Chat</button>
+        <button id="mSave" class="min-h-[44px] border border-dark/20 text-dark font-semibold text-sm rounded-xl press">Simpan</button>
+      </div>
+      <div id="mReviews" class="mt-3 rounded-2xl bg-[#F6F4EA] border border-[#E8E4D0] p-3 text-[11px] text-[#374151]"></div>
+      <a id="mFull" href="#/produk" class="text-[12px] font-semibold text-[#3F5F1A] hover:underline min-h-[44px] inline-flex items-center">Lihat halaman produk →</a>
+    </div>
+  </div>
+</div>
+
+<!-- bottom sheet filter (Jelajahi, mobile) -->
+<div id="sheet" class="sheet-ov fixed inset-0 z-[70] bg-black/50 flex items-end" aria-hidden="true">
+  <div class="sheet-panel bg-white w-full rounded-t-3xl max-h-[88vh] flex flex-col" role="dialog" aria-modal="true" aria-label="Filter barang">
+    <div class="flex items-center justify-between pl-5 pr-2 pt-3 pb-1">
+      <h2 class="font-extrabold text-dark text-lg">Filter</h2>
+      <div class="flex items-center">
+        <button data-reset class="text-[13px] text-glaucous font-semibold min-h-[44px] px-3">Reset semua</button>
+        <button id="sheetClose" class="w-11 h-11 flex items-center justify-center press" aria-label="Tutup filter"><i data-ic="x" data-s="20"></i></button>
+      </div>
+    </div>
+    <div id="filterSheet" class="px-5 pb-4 overflow-y-auto flex-1"></div>
+    <div class="p-4 border-t border-black/5">
+      <button id="sheetApply" class="w-full bg-glaucous text-white font-bold min-h-[48px] rounded-xl press">Tampilkan barang</button>
+    </div>
+  </div>
+</div>
+
+<!-- dialog umum + toast -->
+<div id="dlg" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true">
+  <div id="dlgBox" class="bg-white rounded-2xl w-full max-w-[420px] p-6 max-h-[90vh] overflow-y-auto"></div>
+</div>
+<div id="toast" role="status" aria-live="polite" class="fixed left-1/2 -translate-x-1/2 bottom-24 md:bottom-8 z-[90] bg-dark text-white text-[13px] px-5 py-3 rounded-xl shadow-lg opacity-0 translate-y-2 transition duration-300 pointer-events-none max-w-[90vw] text-center"></div>
+
+<script>
+/* ================= UTIL ================= */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));   // semua teks buatan user wajib lewat esc()
+const rp = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+const remote = (photo, w=900, h=700) => `https://images.unsplash.com/${photo}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
+const PH = remote('photo-1524758631624-e2822e304c36', 800, 600);
+const img = (src, alt='') => `<img src="${src || PH}" alt="${esc(alt)}" loading="lazy" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='${PH}'">`;
+const fmtTime = t => new Date(t).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
+const fmtList = t => { const d=new Date(t), n=new Date(); if (d.toDateString()===n.toDateString()) return fmtTime(t); const y=new Date(n-864e5); return d.toDateString()===y.toDateString() ? 'Kemarin' : d.toLocaleDateString('id-ID',{day:'numeric',month:'short'}); };
+const stars = r => { const k = Math.round(r); return '★'.repeat(k) + '☆'.repeat(5-k); };
+const hashN = s => [...String(s)].reduce((a,c) => (a*31 + c.charCodeAt(0)) >>> 0, 7);
+const AVC = ['#7A9445','#59789F','#A9B6C4','#243C2C'];
+const avColor = s => AVC[hashN(s) % AVC.length];
+const ratingOf = s => 4.5 + (hashN(s) % 6) / 10;
+
+const ICONS = {
+  search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  chevL:'<path d="m15 18-6-6 6-6"/>', chevR:'<path d="m9 18 6-6-6-6"/>', chevD:'<path d="m6 9 6 6 6-6"/>',
+  filter:'<path d="M3 6h18M7 12h10M10 18h4"/>',
+  sparkle:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/>',
+  send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+  shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  tag:'<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
+  cart:'<circle cx="9" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="M3 4h2l2.2 9.2a1 1 0 0 0 .98.8H17a1 1 0 0 0 1-.8L20 7H7"/>',
+  wallet:'<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+  sofa:'<path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0z"/><path d="M4 18v2M20 18v2"/>',
+  chef:'<path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><path d="M6 17h12"/>',
+  book:'<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/>',
+  tv:'<rect width="20" height="15" x="2" y="7" rx="2"/><path d="m17 2-5 5-5-5"/>',
+  shirt:'<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>',
+  grid:'<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+  home:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  plus:'<path d="M5 12h14M12 5v14"/>',
+  truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+  camera:'<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/>',
+  package:'<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+  arrowL:'<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  eyeOff:'<path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c6.5 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3.5 8 10 8a9.7 9.7 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/>'
+};
+const ic = (n, s=18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
+const initIcons = () => document.querySelectorAll('i[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic, +el.dataset.s || 18); });
+
+/* ================= DATA ================= */
+const SLIDES = [
+  {img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80', badge:'Pindah Kos', t:['Mau Pindah ','Kos?'], sub:'Barang yang nggak ikut pindahan, pindahin aja.', cta:'Jual Barang', href:'#/jual', c:'bg-glaucous hover:bg-[#6a89b0]'},
+  {img:'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1200&q=80', badge:'Dekat Kampus', t:['Cari Barang ','Dekat Kampus?'], sub:'Siapa tahu barang yang kamu cari ada di anak kampus sebelah.', cta:'Cari Barang', href:'#/jelajahi', c:'bg-moss hover:bg-[#8aa653]'},
+  {img:'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80', badge:'COD Kampus', t:['COD di ','Sekitar Kampus'], sub:'Lebih dekat, lebih praktis, nggak perlu kirim jauh-jauh.', cta:'Cari Barang', href:'#/jelajahi', c:'bg-moss hover:bg-[#8aa653]'},
+  {img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80', badge:'Baru Aja Masuk', t:['Barang Baru ','Masuk 👀'], sub:'Kipas, meja, rak, elektronik, sampai barang kuliah baru aja dipindahin.', cta:'Lihat Barang', href:'#/home/baru', c:'bg-moss hover:bg-[#8aa653]'},
+  {img:'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80', badge:'Mulai Jual', t:['Punya Barang yang ','Jarang Dipakai?'], sub:'Daripada nganggur di kos, kasih kesempatan buat pindah ke pemilik baru.', cta:'Mulai Jual', href:'#/jual', c:'bg-glaucous hover:bg-[#6a89b0]'},
+  {img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80', badge:'Layanan', t:['Layanan ','PINDAHIN AJA'], sub:'Temukan layanan dan fitur yang bikin jual-beli barang preloved antar mahasiswa jadi lebih gampang.', cta:'Jelajahi Layanan', href:'pages/cara-jual.html', c:'bg-moss hover:bg-[#8aa653]'}
+];
+
+const FAN = [
+  {id:'f1', name:'Kipas Angin Kos', price:75000, cond:'Sangat Baik', campus:'UNAIR', loc:'Dharmawangsa', seller:'andre_unair', img:'https://s.alicdn.com/@sc04/kf/Hd887d9faefd148b4ab180042ac647c25R.jpg_720x720q50.jpg'},
+  {id:'f2', name:'Meja Belajar Lipat', price:120000, cond:'Baik', campus:'ITS', loc:'Sukolilo', seller:'dini_its', img:'https://media.karousell.com/media/photos/products/2020/8/17/computer_laptop_study_table_1597638530_e4566bac_progressive.jpg'},
+  {id:'f3', name:'Digital Rice Cooker Philips 1.8L', price:100000, old:200000, cond:'Normal', campus:'PETRA', loc:'Siwalankerto', seller:'jonathan_petra', img:'https://media.karousell.com/media/photos/products/2023/6/13/philips_rice_cooker_1686633368_de390dfe_progressive.jpg'},
+  {id:'f4', name:'Lampu Belajar Estetik', price:65000, old:160000, cond:'Baik', campus:'ITS', loc:'Sukolilo', seller:'reni_its', img:'https://media.karousell.com/media/photos/products/2022/12/17/ecomaz_led_table_lamp_tl328_1671257330_d6cbf929_progressive.jpg'},
+  {id:'f5', name:'Rak Buku IKEA', price:99000, old:199000, cond:'Sangat Baik', campus:'UBAYA', loc:'Tenggilis', seller:'vina_ubaya', img:'https://tse2.mm.bing.net/th/id/OIP.3ngmw49AH3dsVTDnQ0P8DgHaJ4?r=0&pid=ImgDet&w=206&h=274&c=7&dpr=1.2&o=7&rm=3'}
+];
+
+const PRODUCTS = [
+  {id:'p1', name:'Kipas Angin Cosmos', price:85000, cond:'Sangat Baik', campus:'UKWMS', loc:'Pakuwon City', seller:'naya_ukwms', img:'https://down-id.img.susercontent.com/file/ac3b6af649c6ad3364ed7e467552a1b2', cat:'elektronik', tx:['COD','Meet-up'], ts:8},
+  {id:'p2', name:'Meja Belajar', price:150000, cond:'Baik', campus:'UNAIR', loc:'Kampus B', seller:'raka_unair', img:'https://down-id.img.susercontent.com/file/id-11134207-7rasf-m5dw6jt39o60f7', cat:'kos-furniture', tx:['COD','Meet-up','Delivery'], ts:7},
+  {id:'p3', name:'Rice Cooker Miyako', price:100000, cond:'Sangat Baik', campus:'PETRA', loc:'Siwalankerto', seller:'sari_petra', img:'https://down-id.img.susercontent.com/file/id-11134207-8224o-mitnu0gf5eknb0', cat:'dapur', tx:['COD','Delivery'], ts:6},
+  {id:'p4', name:'Rak Buku 3 Susun', price:80000, cond:'Baik', campus:'ITS', loc:'Sukolilo', seller:'dino_its', img:'https://media.karousell.com/media/photos/products/2023/8/6/3tier_kitchen_utility_trolley__1691317870_7d1f15c7.jpg', cat:'kos-furniture', tx:['COD','Meet-up'], ts:5},
+  {id:'p5', name:'Buku Pengantar Ekonomi', price:55000, cond:'Baik', campus:'PETRA', loc:'Siwalankerto', seller:'devi_petra', img:'https://down-id.img.susercontent.com/file/id-11134207-7rbk2-m8nhi96z1j4h9d', cat:'kuliah', tx:['COD','Meet-up'], ts:4},
+  {id:'p6', name:'Lampu Meja Belajar', price:45000, cond:'Seperti Baru', campus:'ITS', loc:'Sukolilo', seller:'budi_its', img:'https://down-id.img.susercontent.com/file/id-11134207-7rbk3-m84dhrck5cfs8a', cat:'elektronik', tx:['COD'], ts:3},
+  {id:'p7', name:'Kursi Lipat', price:55000, cond:'Baik', campus:'UBAYA', loc:'Tenggilis', seller:'maya_ubaya', img:'https://media.karousell.com/media/photos/products/2023/10/13/camping_chair_buy_1_take_1_1697165482_c893a0cc.jpg', cat:'kos-furniture', tx:['COD','Meet-up','Delivery'], ts:2},
+  {id:'p8', name:'Setrika Philips', price:75000, cond:'Sangat Baik', campus:'UKWMS', loc:'Pakuwon City', seller:'adit_ukwms', img:'https://media.karousell.com/media/photos/products/2022/3/9/philips_affinia_gc16022_1646839420_b2f1ea8c_progressive.jpg', cat:'elektronik', tx:['COD','Delivery'], ts:1},
+  {id:'p9', name:'Laptop Acer 14 Inch', price:3200000, cond:'Baik', campus:'UNAIR', loc:'Kampus A', seller:'sinta_unair', img:'https://down-id.img.susercontent.com/file/id-11134207-7r98q-lw1057c7y1bie4', cat:'elektronik', tx:['COD','Meet-up'], ts:9},
+  {id:'p10', name:'Tikar Yoga 2x2', price:120000, cond:'Sangat Baik', campus:'UBAYA', loc:'Tenggilis', seller:'agus_ubaya', img:'https://down-id.img.susercontent.com/file/id-11134207-7rasc-m0u0oeezqwsec2', cat:'olahraga', tx:['COD','Meet-up'], ts:8},
+  {id:'p11', name:'Kompor Portable', price:90000, cond:'Baik', campus:'UNESA', loc:'Lidah Wetan', seller:'naufal_unesa', img:'https://down-id.img.susercontent.com/file/id-11134207-7ras9-m2o5d36ps3a8df', cat:'dapur', tx:['COD','Delivery'], ts:7},
+  {id:'p12', name:'Tas Selempang Wanita', price:65000, cond:'Seperti Baru', campus:'UC', loc:'Ngagel', seller:'lina_uc', img:'https://tse2.mm.bing.net/th/id/OIP.jIrO6MZZ7YhelkmtTVxMEAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3', cat:'fashion', tx:['COD','Meet-up'], ts:6},
+  {id:'p13', name:'Box Penyimpanan 3 Kotak', price:110000, cond:'Baik', campus:'ITS', loc:'Kejawan', seller:'ika_its', img:'https://media.karousell.com/media/photos/products/2025/7/28/contener__box_penyimpanan_55lt_1753697446_f237bad2_progressive.jpg', cat:'rumah-tangga', tx:['COD','Delivery'], ts:5},
+  {id:'p14', name:'Buku Tulis 5 Rim', price:30000, cond:'Sangat Baik', campus:'PETRA', loc:'Siwalankerto', seller:'alvin_petra', img:'https://down-id.img.susercontent.com/file/id-11134201-7rbk9-majiyrikvwny79', cat:'alat-tulis', tx:['COD'], ts:4},
+  {id:'p15', name:'Sepeda Lipat 20 Inch', price:1750000, cond:'Baik', campus:'UKWMS', loc:'Rungkut', seller:'bela_ukwms', img:'https://media.karousell.com/media/photos/products/2021/9/7/camp_gold_foldable_bike_1630982514_546ce62d_progressive.jpg', cat:'olahraga', tx:['COD','Meet-up','Delivery'], ts:9},
+  {id:'p16', name:'Lemari Baju 2 Pintu', price:260000, cond:'Layak Pakai', campus:'UNESA', loc:'Ketintang', seller:'rendi_unesa', img:'https://down-my.img.susercontent.com/file/2bcc54e4188da44f4b15cd67e6496fd4', cat:'kos-furniture', tx:['COD','Meet-up'], ts:8},
+  {id:'p17', name:'Jaket Hoodie Pria', price:140000, cond:'Sangat Baik', campus:'UC', loc:'Ngagel', seller:'razan_uc', img:'https://down-id.img.susercontent.com/file/id-11134207-7rasc-m2248y4nkvl999', cat:'fashion', tx:['COD','Meet-up'], ts:7},
+  {id:'p18', name:'Kamera Canon EOS 700D', price:2900000, cond:'Baik', campus:'ITS', loc:'Sukolilo', seller:'ezra_its', img:'https://tse2.mm.bing.net/th/id/OIP.cHYvxwJSOH4XrXIqVdElNgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3', cat:'elektronik', tx:['COD','Meet-up'], ts:10},
+  {id:'p19', name:'Sprei 1 Set', price:65000, cond:'Seperti Baru', campus:'UNAIR', loc:'Mulyorejo', seller:'nur_unair', img:'https://tse1.mm.bing.net/th/id/OIP.bmav6iGdWPPRdKzw2EB0swHaGB?r=0&rs=1&pid=ImgDetMain&o=7&rm=3', cat:'rumah-tangga', tx:['COD','Delivery'], ts:6},
+  {id:'p20', name:'Jam Tangan Casio', price:190000, cond:'Baik', campus:'UBAYA', loc:'Tenggilis', seller:'agus_ubaya', img:'https://down-id.img.susercontent.com/file/id-11134207-7r98p-lyaf6v82cwq521', cat:'fashion', tx:['COD','Meet-up'], ts:5},
+  {id:'p21', name:'Laptop Acer Aspire 5', price:2800000, cond:'Baik', campus:'TELKOM', loc:'Ketintang', seller:'nabila_telk', img:'https://tse4.mm.bing.net/th/id/OIP.AUYpaX-hYutqWqM3wMfNVAHaHa?r=0&w=1280&h=1280&rs=1&pid=ImgDetMain&o=7&rm=3', cat:'elektronik', tx:['COD','Meet-up'], ts:12},
+  {id:'p22', name:'Meja Laptop Minimalis', price:180000, cond:'Sangat Baik', campus:'TELKOM', loc:'Ketintang', seller:'fajar_telk', img:'https://tse4.mm.bing.net/th/id/OIP.fo6n11aF6WS_qXILCGHaeQHaJ4?r=0&rs=1&pid=ImgDetMain&o=7&rm=3', cat:'kos-furniture', tx:['COD','Meet-up'], ts:11},
+  {id:'p23', name:'Lampu Belajar LED', price:60000, cond:'Seperti Baru', campus:'TELKOM', loc:'Ketintang', seller:'rani_telk', img:'https://media.karousell.com/media/photos/products/2022/9/3/miniso_led_table_lamp_1662205399_0f880309_progressive.jpg', cat:'elektronik', tx:['COD'], ts:10},
+  {id:'p24', name:'Buku Algoritma & Struktur Data', price:45000, cond:'Baik', campus:'TELKOM', loc:'Ketintang', seller:'deka_telk', img:'https://tse4.mm.bing.net/th/id/OIP.EegGygzNL1oMvvoWwFEuzQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3', cat:'kuliah', tx:['COD','Meet-up'], ts:9},
+  {id:'p25', name:'Sepatu Sneakers Pria', price:120000, cond:'Baik', campus:'TELKOM', loc:'Ketintang', seller:'azka_telk', img:'https://media.karousell.com/media/photos/products/2025/3/7/preloved_sepatu_lari_running_n_1741343519_ebf713f2_progressive.jpg', cat:'fashion', tx:['COD','Meet-up'], ts:8},
+  {id:'p26', name:'Kursi Gaming Ergonomis', price:240000, cond:'Sangat Baik', campus:'TELKOM', loc:'Ketintang', seller:'ridho_telk', img:'https://down-id.img.susercontent.com/file/id-11134207-7ras9-m5539u90to2ef6', cat:'kos-furniture', tx:['COD','Meet-up'], ts:7},
+  {id:'p27', name:'Kulkas Mini 2 Pintu', price:680000, cond:'Baik', campus:'TELKOM', loc:'Ketintang', seller:'selly_telk', img:'https://tse1.mm.bing.net/th/id/OIP.zzqaqzpKdti24_WusKVS-wHaIC?r=0&rs=1&pid=ImgDetMain&o=7&rm=3', cat:'rumah-tangga', tx:['COD','Delivery'], ts:9},
+  {id:'p28', name:'Tas Ransel Campus', price:110000, cond:'Seperti Baru', campus:'TELKOM', loc:'Ketintang', seller:'maya_telk', img:'https://down-id.img.susercontent.com/file/id-11134207-822wq-ml8rqbnsiyo2be', cat:'fashion', tx:['COD','Meet-up'], ts:8},
+  {id:'p29', name:'Mixer Blender Philips', price:95000, cond:'Baik', campus:'TELKOM', loc:'Ketintang', seller:'fira_telk', img:'https://down-id.img.susercontent.com/file/id-11134207-7r990-m01ddqhaz1mwab', cat:'dapur', tx:['COD','Delivery'], ts:7},
+  {id:'p30', name:'Printer Canon MP287', price:420000, cond:'Layak Pakai', campus:'TELKOM', loc:'Ketintang', seller:'hanif_telk', img:'https://www.kanakomputer.com/wp-content/uploads/2023/09/mp287-canon.jpg', cat:'elektronik', tx:['COD','Meet-up'], ts:10}
+];
+
+const CATS = [
+  {n:'Kos & Furniture', c:0, i:'sofa', img:'https://cdn.designsmaz.com/wp-content/uploads/2014/07/teens-bedroom-miraculous-teenage-girl-bedroom-design-idea-with-white-bookshelf-with-books-brown-wardrobe-and-white-bed-with-white-gray-pillows-cool-teenage-girl-bedroom-design-ideas.jpg', q:'kos-furniture'},
+  {n:'Dapur', c:0, i:'chef', img:'https://tse1.mm.bing.net/th/id/OIP.W7lG6snQnG4ZrLI5C8zgGwHaHo?r=0&w=740&h=763&rs=1&pid=ImgDetMain&o=7&rm=3', q:'dapur'},
+  {n:'Kuliah', c:0, i:'book', img:'https://www.nuss.org.sg/wp-content/uploads/2024/10/ChildrenWishingWell_2024_FA_Webicon_11102024.jpg', q:'kuliah'},
+  {n:'Elektronik', c:0, i:'tv', img:'https://5.imimg.com/data5/SELLER/Default/2023/3/295770102/DN/FL/FL/10494861/1-mixers-grinders-rice-cookers-induction-cooktops-kettles-500x500.jpg', q:'elektronik'},
+  {n:'Fashion', c:0, i:'shirt', img:'https://i.pinimg.com/736x/51/95/5a/51955a4ce04b301974507a6e57427884.jpg', q:'fashion'},
+  {n:'Alat Tulis', c:0, i:'book', img:'https://spreadshub.com/wp-content/uploads/2025/06/Must-Have-Office-Stationery-Supplies-for-Every-Desk-Explained-768x768.jpg', q:'alat-tulis'},
+  {n:'Rumah Tangga', c:0, i:'grid', img:'https://images.unsplash.com/photo-1581539250439-c96689b516dd?auto=format&fit=crop&w=900&q=80', q:'rumah-tangga'},
+  {n:'Olahraga', c:0, i:'sparkle', img:'https://tse3.mm.bing.net/th/id/OIP.u8qAysCRiRtXktkJSUp3aQHaEt?r=0&w=1200&h=764&rs=1&pid=ImgDetMain&o=7&rm=3', q:'olahraga'},
+  {n:'Lainnya', c:0, i:'grid', img:'https://id.pinterest.com/pin/484488872404954554/', q:'lainnya'}
+];
+
+const getActiveProducts = () => PRODUCTS.filter(p => !SOLD.has(p.id));
+const getCategoryCounts = () => {
+  const counts = {};
+  getActiveProducts().forEach(p => {
+    const key = p.cat || 'lainnya';
+    counts[key] = (counts[key] || 0) + 1;
+  });
+  return counts;
+};
+const getCampusCounts = () => {
+  const counts = {};
+  getActiveProducts().forEach(p => {
+    counts[p.campus] = (counts[p.campus] || 0) + 1;
+  });
+  return counts;
+};
+
+const CAMPUS = [
+  {id:'UNAIR', ab:'UNAIR', name:'UNAIR', loc:'Mulyorejo', c:0},
+  {id:'ITS', ab:'ITS', name:'ITS', loc:'Sukolilo', c:0},
+  {id:'PETRA', ab:'PCU', name:'PETRA', loc:'Siwalankerto', c:0},
+  {id:'UBAYA', ab:'UBAYA', name:'UBAYA', loc:'Rungkut', c:0},
+  {id:'UKWMS', ab:'UKWMS', name:'UKWMS', loc:'Pakuwon', c:0},
+  {id:'UC', ab:'UC', name:'UC', loc:'Ngagel', c:0},
+  {id:'UNESA', ab:'UNESA', name:'UNESA', loc:'Lidah Wetan', c:0},
+  {id:'TELKOM', ab:'TELKOM', name:'Telkom University', loc:'Ketintang', c:0},
+  {id:'LAIN', ab:'+', name:'Lainnya', loc:'Kampus lain', c:0}
+];
+const campusStockCount = id => {
+  const counts = getCampusCounts();
+  if (id === 'LAIN') return Object.entries(counts).filter(([campus]) => !MAIN_CAMPUS.includes(campus)).reduce((sum, [,count]) => sum + count, 0);
+  return counts[id] || 0;
+};
+
+const FEATURES = [
+  ['shield','100% Mahasiswa','Verifikasi KTM aktif'],
+  ['tag','COD Kampus','Cek fisik langsung'],
+  ['wallet','Harga Ramah Kos','Mulai dari Rp10.000'],
+  ['message','Bisa Nego Santai','Langsung chat pemilik']
+];
+
+const TESTI = [
+  {av:'AJ', q:'"Rice cooker laku, kos baru lebih legal!"', w:'— Andre, Mhs UNAIR Hukum \'23'},
+  {av:'RK', q:'"Lampu belajar & kipas laku 2 jam!"', w:'— Rama, Alumni UKWMS Farmasi \'20'},
+  {av:'DN', q:'"Meja lipat langsung diambil adik tingkat."', w:'— Dina, Mhs ITS'}
+];
+
+/* ================= STORAGE ================= */
+const store = {
+  get(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch{ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch{ return false; } }
+};
+let wish = store.get('pa_wish', []);
+function updateBadge(){
+  const b = $('#wishBadge');
+  b.textContent = wish.length;
+  b.classList.toggle('hidden', wish.length === 0);
+}
+function toggleWish(id){
+  wish = wish.includes(id) ? wish.filter(x => x !== id) : [...wish, id];
+  store.set('pa_wish', wish);
+  updateBadge();
+  document.querySelectorAll(`[data-wish="${id}"]`).forEach(b => b.classList.toggle('on', wish.includes(id)));
+  afterWish();
+}
+function afterWish(){
+  if (!$('#view-wishlist').classList.contains('hidden')) renderWish();
+  if (!$('#view-profil').classList.contains('hidden')) renderProfile(PTAB);
+}
+
+/* ╔═══════════════════════════════════════════════╗
+   ║  AUTH (masuk / daftar / keluar)                ║
+   ╚═══════════════════════════════════════════════╝
+   CATATAN KEAMANAN: ini PROTOTIPE front-end. Akun disimpan di localStorage browser,
+   jadi bukan keamanan sungguhan. Untuk produksi pakai backend (Firebase Auth / Supabase / API sendiri). */
+const USERS_KEY = 'pa_users', SESSION_KEY = 'pa_session';
+const getUsers = () => store.get(USERS_KEY, []);
+const saveUsers = us => store.set(USERS_KEY, us);
+let me = null;
+let SOLD = new Set();
+const refreshSold = () => { SOLD = new Set(getUsers().flatMap(u => u.sold || [])); };
+function loadMe(){ const id = store.get(SESSION_KEY, null); me = getUsers().find(u => u.id === id) || null; }
+function saveMe(patch){ if (!me) return; Object.assign(me, patch); saveUsers(getUsers().map(u => u.id === me.id ? me : u)); }
+function recordPurchase(product, orderNo, va = '') {
+  if (!me || !product) return;
+  const purchase = {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    campus: product.campus,
+    loc: product.loc,
+    seller: product.seller,
+    img: product.img || PH,
+    orderNo,
+    va,
+    date: new Date().toISOString(),
+    status: 'Menunggu konfirmasi'
+  };
+  const purchases = Array.isArray(me.purchases) ? me.purchases : [];
+  saveMe({ purchases: [purchase, ...purchases].slice(0, 20) });
+}
+
+const VOUCHER_CODE = 'LALAMOVEFIRST';
+const LALAMOVE_SHIPPING = 20000;
+const VOUCHER_SHIPPING_DISCOUNT_RATE = 0.2;
+function normalizeVoucher(v){
+  const base = { code: VOUCHER_CODE, used: false, claimedAt: null, usedAt: null };
+  if (!v || typeof v !== 'object') return base;
+  return {
+    code: v.code || VOUCHER_CODE,
+    used: !!v.used,
+    claimedAt: v.claimedAt || null,
+    usedAt: v.usedAt || null
+  };
+}
+function getShippingVoucherSummary(codeInput = ''){
+  const voucher = me && me.voucher ? normalizeVoucher(me.voucher) : normalizeVoucher();
+  const requested = String(codeInput || '').trim().toUpperCase();
+  const code = voucher.code || VOUCHER_CODE;
+  const active = !voucher.used && (requested ? requested === code : true);
+  const discount = active ? Math.round(LALAMOVE_SHIPPING * VOUCHER_SHIPPING_DISCOUNT_RATE) : 0;
+  return { voucher, code, active, discount, finalShipping: Math.max(LALAMOVE_SHIPPING - discount, 0), total: 0 };
+}
+function ensureUserVoucher(u){
+  if (!u) return u;
+  if (!u.voucher || typeof u.voucher !== 'object') u.voucher = normalizeVoucher();
+  else u.voucher = normalizeVoucher(u.voucher);
+  return u;
+}
+function maybeShowVoucherPopup(){
+  if (!me) return;
+  const users = getUsers();
+  const currentUser = users.find(u => u.id === me.id) || me;
+  ensureUserVoucher(currentUser);
+  if (currentUser.voucher.used) return;
+  if ($('#dlg').classList.contains('hidden') === false) return;
+  const html = `
+    <div class="overflow-hidden rounded-[28px] bg-gradient-to-br from-[#F3F8E4] via-white to-[#EEF0FB] p-1">
+      <div class="rounded-[24px] bg-white p-5 text-center shadow-[0_18px_42px_rgba(36,60,44,0.12)]">
+        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#E4F0CA] to-[#C6E03A] text-[28px] shadow-sm">
+          <span>🚚</span>
+        </div>
+        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#7A9445]">Voucher baru</p>
+        <h3 class="mt-2 serif text-[30px] font-semibold text-dark leading-none">Diskon 20% ongkir</h3>
+        <p class="mt-2 text-[13px] leading-relaxed text-[#4B5563]">Untuk pesanan pertama kamu via Lalamove. Jangan lewatkan biaya kirim yang lebih ringan tiap kali checkout.</p>
+        <div class="mt-5 rounded-2xl border border-[#DCE6FA] bg-[#EEF0FB] p-4 text-left">
+          <p class="text-[10px] uppercase tracking-[0.14em] text-[#6B7280]">Kode voucher</p>
+          <div class="mt-2 flex items-center justify-between gap-3 rounded-xl bg-white px-3 py-2 shadow-sm ring-1 ring-black/5">
+            <span class="text-lg font-extrabold tracking-[0.12em] text-dark">${esc(currentUser.voucher.code || VOUCHER_CODE)}</span>
+            <button type="button" data-copy-voucher="${esc(currentUser.voucher.code || VOUCHER_CODE)}" class="min-h-[36px] rounded-lg border border-black/10 bg-[#F6F4EA] px-3 text-[11px] font-semibold text-dark press">Salin</button>
+          </div>
+        </div>
+        <div class="mt-5 flex gap-2">
+          <button type="button" data-dlg-close class="flex-1 min-h-[46px] rounded-xl border border-black/15 text-[13px] font-semibold text-dark press">Nanti</button>
+          <button type="button" data-voucher-use class="flex-1 min-h-[46px] rounded-xl bg-gradient-to-r from-[#7A9445] to-[#59789F] text-white text-[13px] font-bold shadow-md shadow-[#7A9445]/20 press">Gunakan</button>
+        </div>
+      </div>
+    </div>`;
+  openDlg(html, true);
+}
+function applyVoucherToCurrentUser(){
+  if (!me) return false;
+  const users = getUsers();
+  const idx = users.findIndex(u => u.id === me.id);
+  if (idx === -1) return false;
+  users[idx] = ensureUserVoucher(users[idx]);
+  users[idx].voucher = { ...users[idx].voucher, used: true, usedAt: new Date().toISOString() };
+  saveUsers(users);
+  loadMe();
+  return true;
+}
+
+async function hashPw(pw, salt){
+  try{
+    if (window.crypto && crypto.subtle) {
+      const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt + ':' + pw));
+      return 'h:' + [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join('');
+    }
+  }catch{}
+  return 'b:' + btoa(unescape(encodeURIComponent(salt + ':' + pw)));   // fallback kalau bukan localhost/https
+}
+async function ensureDemo(){
+  const us = getUsers();
+  if (us.some(u => u.username === 'naya_ukwms')) return;
+  us.push({id:'u_demo', name:'Naya Pramesthi', username:'naya_ukwms', email:'naya@contoh.id', campus:'UKWMS', wa:'081234567890',
+           pw: await hashPw('demo1234','naya_ukwms'), rating:4.9, reviewCount:12, soldBase:14, sold:[], purchases:[], bio:''});
+  saveUsers(us);
+}
+const reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, reUser = /^[a-z0-9_]{3,20}$/, reWA = /^(\+?62|0)8[0-9]{8,12}$/;
+function setErr(key, msg){
+  const el = document.querySelector(`[data-err="${key}"]`); if (!el) return;
+  el.textContent = msg || ''; el.classList.toggle('hidden', !msg);
+  const inp = document.getElementById(key); if (inp) inp.setAttribute('aria-invalid', msg ? 'true' : 'false');
+}
+let NEXT = '';
+function goNext(){ location.hash = (NEXT && NEXT.startsWith('#/')) ? NEXT : '#/profil'; }   // hanya hash internal (anti open-redirect)
+function loginAs(u){
+  store.set(SESSION_KEY, u.id); me = u; loadRooms(); renderAuthUI(); maybeShowVoucherPopup();
+}
+function renderAuthUI(){
+  $('#acctAv').innerHTML = me ? esc(me.name.trim()[0].toUpperCase()) : ic('user', 18);
+  $('#acctMenu').innerHTML = me ? `
+    <div class="px-4 py-3 border-b border-black/5"><b class="block text-[13px] truncate">${esc(me.name)}</b><span class="block text-[11px] text-[#6B7280] truncate">@${esc(me.username)}</span></div>
+    <a role="menuitem" href="#/profil" class="flex items-center min-h-[44px] px-4 hover:bg-[#EEF0FB]">Profil saya</a>
+    <a role="menuitem" href="#/wishlist" class="flex items-center min-h-[44px] px-4 hover:bg-[#EEF0FB]">Barang disimpan</a>
+    <a role="menuitem" href="#/chat" class="flex items-center min-h-[44px] px-4 hover:bg-[#EEF0FB]">Chat</a>
+    <a role="menuitem" href="#/jual" class="flex items-center min-h-[44px] px-4 hover:bg-[#EEF0FB]">Jual barang</a>
+    <a role="menuitem" href="#/masuk" class="flex items-center min-h-[44px] px-4 hover:bg-[#EEF0FB]">Masuk dengan akun lain</a>
+    <a role="menuitem" href="#/daftar" class="flex items-center min-h-[44px] px-4 hover:bg-[#EEF0FB]">Buat akun baru</a>
+    <button role="menuitem" data-logout class="w-full text-left flex items-center min-h-[44px] px-4 hover:bg-[#EEF0FB] text-[#B91C1C] border-t border-black/5">Keluar</button>` : '';
+  updateChatDot();
+}
+$('#acctBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  if (!me) { location.hash = '#/masuk'; return; }
+  const m = $('#acctMenu'); const open = m.classList.toggle('hidden') === false;
+  e.currentTarget.setAttribute('aria-expanded', open);
+});
+document.addEventListener('click', e => { if (!e.target.closest('#acctBtn,#acctMenu')) $('#acctMenu').classList.add('hidden'); });
+function logoutCurrentAccount(nextHash = '#/'){
+  store.set(SESSION_KEY, null); me = null; ROOMS = {}; ACTIVE = null; renderAuthUI();
+  toast('Kamu sudah keluar.');
+  if (nextHash) location.hash = nextHash;
+  else if (['', '#', '#/'].includes(location.hash)) route(); else location.hash = '#/';
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-logout]')) return;
+  logoutCurrentAccount();
+});
+document.addEventListener('click', e => {
+  const el = e.target.closest('[href="#/masuk"], [href="#/daftar"]');
+  if (!el) return;
+  if (!me) return;
+  e.preventDefault();
+  logoutCurrentAccount(el.getAttribute('href'));
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-back="true"]')) return;
+  e.preventDefault();
+  if (window.history.length > 1 && document.referrer) {
+    window.history.back();
+    return;
+  }
+  location.hash = '#/';
+});
+
+/* tombol mata password */
+function paintEye(btn){ const inp = $('#' + btn.dataset.eye); btn.innerHTML = ic(inp.type === 'password' ? 'eye' : 'eyeOff', 18); btn.setAttribute('aria-label', inp.type === 'password' ? 'Tampilkan password' : 'Sembunyikan password'); }
+document.querySelectorAll('[data-eye]').forEach(b => { paintEye(b); b.addEventListener('click', () => { const i = $('#' + b.dataset.eye); i.type = i.type === 'password' ? 'text' : 'password'; paintEye(b); }); });
+
+/* form masuk */
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = $('#lId').value.trim().toLowerCase(), pw = $('#lPw').value;
+  ['lId','lPw','lForm'].forEach(k => setErr(k, ''));
+  let bad = false;
+  if (!id) { setErr('lId', 'Isi email atau username dulu ya.'); bad = true; }
+  if (!pw) { setErr('lPw', 'Password-nya belum diisi.'); bad = true; }
+  if (bad) return;
+  const btn = $('#lSubmit'); btn.disabled = true; btn.textContent = 'Memproses…';
+  const u = getUsers().find(x => x.username === id || x.email === id);
+  const ok = u && u.pw === await hashPw(pw, u.username);
+  btn.disabled = false; btn.textContent = 'Masuk';
+  if (!ok) { setErr('lForm', 'Username/email atau password salah.'); return; }
+  loginAs(u); toast('Selamat datang lagi, ' + u.name.split(' ')[0] + '.'); goNext();
+});
+$('#demoFill').addEventListener('click', () => { $('#lId').value = 'naya_ukwms'; $('#lPw').value = 'demo1234'; });
+document.querySelector('[data-google]').addEventListener('click', () => toast('Login Google butuh backend (mis. Firebase Auth). Belum aktif di prototipe ini.'));
+
+/* form daftar */
+$('#rCampus').innerHTML = '<option value="">Pilih kampus</option>' + CAMPUS.map(c => `<option value="${c.id === 'LAIN' ? 'Lainnya' : c.id}">${c.name || c.ab}</option>`).join('');
+$('#regForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const v = {name:$('#rName').value.trim(), user:$('#rUser').value.trim().toLowerCase(), email:$('#rEmail').value.trim().toLowerCase(), pw:$('#rPw').value, campus:$('#rCampus').value, wa:$('#rWa').value.replace(/[\s-]/g,'')};
+  ['rName','rUser','rEmail','rPw','rCampus','rWa','rForm'].forEach(k => setErr(k, ''));
+  const us = getUsers(); let bad = false;
+  const fail = (k, m) => { setErr(k, m); bad = true; };
+  if (v.name.length < 2) fail('rName', 'Nama minimal 2 huruf.');
+  if (!reUser.test(v.user)) fail('rUser', 'Username 3-20 karakter: huruf kecil, angka, atau underscore.');
+  else if (us.some(u => u.username === v.user)) fail('rUser', 'Username ini udah dipakai.');
+  if (!reEmail.test(v.email)) fail('rEmail', 'Format email belum bener.');
+  else if (us.some(u => u.email === v.email)) fail('rEmail', 'Email ini udah terdaftar.');
+  if (v.pw.length < 8) fail('rPw', 'Password minimal 8 karakter.');
+  if (!v.campus) fail('rCampus', 'Pilih kampusmu dulu.');
+  if (!reWA.test(v.wa)) fail('rWa', 'Nomor WhatsApp belum valid (contoh: 081234567890).');
+  if (bad) return;
+  const btn = $('#rSubmit'); btn.disabled = true; btn.textContent = 'Membuat akun…';
+  const u = {id:'u' + Date.now(), name:v.name, username:v.user, email:v.email, campus:v.campus, wa:v.wa, pw: await hashPw(v.pw, v.user), rating:0, reviewCount:0, soldBase:0, sold:[], purchases:[], bio:'', voucher:{ code: VOUCHER_CODE, used:false, claimedAt:new Date().toISOString(), usedAt:null }};
+  us.push(u);
+  const saved = saveUsers(us);
+  btn.disabled = false; btn.textContent = 'Buat Akun';
+  if (!saved) { setErr('rForm', 'Penyimpanan browser penuh atau diblokir. Coba lagi.'); return; }
+  loginAs(u); toast('Akun jadi. Yuk pindahin barang pertamamu.'); goNext();
+});
+
+/* ================= DIALOG UMUM + TOAST ================= */
+let toastT;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg;
+  t.classList.remove('opacity-0','translate-y-2');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.add('opacity-0','translate-y-2'), 2800);
+}
+function openDlg(html, blur = false){
+  $('#dlgBox').innerHTML = html;
+  const d = $('#dlg'); d.classList.remove('hidden'); d.classList.add('flex'); document.body.style.overflow = 'hidden';
+  document.body.classList.toggle('has-modal-blur', Boolean(blur));
+  const f = $('#dlgBox').querySelector('input,textarea,select,button:not([data-dlg-close])'); if (f) f.focus();
+}
+function closeDlg(){
+  const d = $('#dlg'); if (d.classList.contains('hidden')) return;
+  d.classList.add('hidden'); d.classList.remove('flex'); document.body.style.overflow = '';
+  document.body.classList.remove('has-modal-blur');
+}
+$('#dlg').addEventListener('click', e => {
+  if (e.target.id === 'dlg' || e.target.closest('[data-dlg-close]')) closeDlg();
+  const copyBtn = e.target.closest('[data-copy-va]');
+  if (copyBtn) {
+    const va = copyBtn.dataset.copyVa;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(va).then(() => toast('Nomor VA berhasil disalin.')).catch(() => toast('Nomor VA: ' + va));
+    } else {
+      toast('Nomor VA: ' + va);
+    }
+  }
+  const voucherCopy = e.target.closest('[data-copy-voucher]');
+  if (voucherCopy) {
+    const code = voucherCopy.dataset.copyVoucher;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(() => toast('Kode voucher berhasil disalin.')).catch(() => toast('Kode voucher: ' + code));
+    } else {
+      toast('Kode voucher: ' + code);
+    }
+  }
+  const voucherApply = e.target.closest('[data-apply-voucher]');
+  if (voucherApply) {
+    const product = PRODUCTS.find(item => item.id === voucherApply.dataset.productId) || FAN.find(item => item.id === voucherApply.dataset.productId);
+    const orderNo = voucherApply.dataset.orderNo || '';
+    const va = voucherApply.dataset.va || '';
+    const input = $('#voucherCheckoutInput');
+    const code = (input ? input.value : '').trim().toUpperCase();
+    const voucher = me && me.voucher ? normalizeVoucher(me.voucher) : null;
+    if (!voucher || voucher.used) { toast('Voucher tidak aktif atau sudah dipakai.'); return; }
+    if (code !== (voucher.code || VOUCHER_CODE)) { toast('Kode voucher tidak sesuai.'); return; }
+    if (!applyVoucherToCurrentUser()) { toast('Voucher tidak bisa diterapkan.'); return; }
+    if (product) openCheckoutDialog(product, orderNo, va, code);
+    toast('Kode voucher berhasil dipakai. Diskon 20% ongkir aktif.');
+    return;
+  }
+  const voucherUse = e.target.closest('[data-voucher-use]');
+  if (voucherUse) {
+    if (applyVoucherToCurrentUser()) {
+      closeDlg();
+      toast('Voucher LALAMOVEFIRST berhasil dipakai untuk pengiriman pertamamu.');
+    }
+  }
+  const confirm = e.target.closest('[data-confirm-purchase]');
+  if (confirm) {
+    const product = PRODUCTS.find(item => item.id === confirm.dataset.confirmPurchase) || FAN.find(item => item.id === confirm.dataset.confirmPurchase);
+    if (product) recordPurchase(product, confirm.dataset.orderNo || '-', confirm.dataset.va || '');
+  }
+});
+let pendingConfirm = null;
+function askConfirm(title, text, okLabel, cb){
+  pendingConfirm = cb;
+  openDlg(`<h3 class="serif text-[22px] font-semibold text-dark">${esc(title)}</h3>
+    <p class="mt-2 text-[13px] text-[#6B7280]">${esc(text)}</p>
+    <div class="mt-6 flex gap-2">
+      <button data-dlg-close class="flex-1 min-h-[44px] rounded-xl border border-black/15 text-[13px] font-semibold text-dark press">Batal</button>
+      <button data-confirm class="flex-1 min-h-[44px] rounded-xl bg-[#B91C1C] text-white text-[13px] font-bold press">${esc(okLabel)}</button>
+    </div>`);
+}
+$('#dlg').addEventListener('click', e => { if (e.target.closest('[data-confirm]')) { const cb = pendingConfirm; pendingConfirm = null; closeDlg(); if (cb) cb(); } });
+
+/* ================= NAVBAR ================= */
+$('#yr').textContent = new Date().getFullYear();
+$('#burger').addEventListener('click', e => {
+  const m = $('#mMenu'); const open = m.classList.toggle('hidden') === false;
+  e.currentTarget.setAttribute('aria-expanded', open);
+});
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+$('#logo').addEventListener('click', e => {
+  e.preventDefault();
+  const el = $('#logo');
+  const finish = () => {
+    if (['', '#', '#/'].includes(location.hash)) window.scrollTo({top:0, behavior: reduceMotion() ? 'auto' : 'smooth'});
+    else location.hash = '#/';
+  };
+  if (reduceMotion()) return finish();
+  el.classList.remove('blurpulse'); void el.offsetWidth; el.classList.add('blurpulse');
+  setTimeout(() => { el.classList.remove('blurpulse'); finish(); }, 450);
+});
+
+/* ================= SEARCH (navbar) ================= */
+const TREND = ['Kipas angin','Rice cooker','Meja belajar','Kursi','Rak buku','Buku kuliah','Setrika','Lampu belajar'];
+const PH_LIST = ['Cari kipas buat kos…','Cari meja belajar…','Cari buku kuliah…','Cari barang di sekitar kampus…'];
+const q = $('#q'), sg = $('#sugg');
+let phI = 0;
+setInterval(() => { if (document.activeElement !== q && !q.value) { phI = (phI + 1) % PH_LIST.length; q.placeholder = PH_LIST[phI]; } }, 3500);
+function showSugg(){
+  const v = q.value.trim().toLowerCase();
+  const list = v ? [...new Set([...TREND, ...PRODUCTS.map(p => p.name)])].filter(t => t.toLowerCase().includes(v)).slice(0,6) : TREND;
+  sg.innerHTML = (v ? '' : '<p class="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#6B7280]">Lagi banyak dicari</p>') +
+    (list.length ? list.map(t => `<button type="button" data-s="${esc(t)}" class="w-full text-left flex items-center gap-2 px-3 min-h-[44px] rounded-lg hover:bg-[#EEF0FB] text-[13px]"><span class="text-gray-400">${ic('search',14)}</span>${esc(t)}</button>`).join('')
+      : '<p class="px-3 py-3 text-[13px] text-[#6B7280]">Belum ada yang cocok. Coba kata lain.</p>');
+  sg.classList.remove('hidden');
+}
+const goSearch = t => { sg.classList.add('hidden'); q.blur(); location.hash = '#/jelajahi' + (t ? '?q=' + encodeURIComponent(t) : ''); };
+q.addEventListener('focus', showSugg);
+q.addEventListener('input', showSugg);
+sg.addEventListener('mousedown', e => { const b = e.target.closest('[data-s]'); if (b) { e.preventDefault(); goSearch(b.dataset.s); } });
+$('#searchForm').addEventListener('submit', e => { e.preventDefault(); goSearch(q.value.trim()); });
+document.addEventListener('click', e => { if (!e.target.closest('#searchForm')) sg.classList.add('hidden'); });
+
+/* ================= HERO ================= */
+(function(){
+  const hero = $('#hero'), track = $('#heroTrack'), dots = $('#hDots');
+  track.innerHTML = SLIDES.map((s,i) => `
+    <article class="slide absolute inset-0 ${i===0?'on':''}" aria-hidden="${i!==0}">
+      <img src="${s.img}" alt="" class="absolute inset-0 w-full h-full object-cover" draggable="false" style="filter:brightness(.8) saturate(.95)" onerror="this.remove()">
+      <div class="absolute inset-0" style="background:linear-gradient(90deg,rgba(36,60,44,.95) 0%,rgba(36,60,44,.85) 35%,rgba(36,60,44,.45) 65%,rgba(36,60,44,.25) 100%)"></div>
+      <div class="absolute inset-0" style="background:linear-gradient(0deg,rgba(0,0,0,.35) 0%,transparent 40%)"></div>
+      <div class="relative h-full flex flex-col items-start justify-center gap-3 md:gap-4 pl-6 md:pl-14 pr-6 max-w-[540px] md:max-w-[600px]">
+        <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold text-[#B9DB7A] border border-[#C6E03A]/25 backdrop-blur-sm" style="background:rgba(122,148,69,.35)">${ic('send',12)}${s.badge}</span>
+        <h2 class="text-[26px] md:text-[38px] leading-tight font-extrabold text-white">${s.t[0]}<span class="text-vanilla">${s.t[1]}</span></h2>
+        <p class="text-[13px] md:text-[15px] leading-relaxed text-white/90 line-clamp-2">${s.sub}</p>
+        <a href="${s.href}" class="${s.c} text-white font-semibold text-[14px] px-6 min-h-[44px] inline-flex items-center gap-2 rounded-xl shadow-lg shadow-black/30 transition press">${ic('search',16)}${s.cta}</a>
+      </div>
+    </article>`).join('');
+  dots.innerHTML = SLIDES.map((_,i) => `<button class="dot hit ${i===0?'on':''}" aria-label="Slide ${i+1}" data-i="${i}"></button>`).join('');
+  const slides = [...track.children], dotEls = [...dots.children];
+  let cur = 0, timer = null;
+  const go = n => {
+    cur = (n + slides.length) % slides.length;
+    slides.forEach((s,i) => { s.classList.toggle('on', i === cur); s.setAttribute('aria-hidden', i !== cur); });
+    dotEls.forEach((d,i) => d.classList.toggle('on', i === cur));
+  };
+  const start = () => { stop(); timer = setInterval(() => go(cur + 1), 30000); };
+  const stop = () => { clearInterval(timer); timer = null; };
+  $('#hPrev').addEventListener('click', () => { go(cur - 1); start(); });
+  $('#hNext').addEventListener('click', () => { go(cur + 1); start(); });
+  dots.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) { go(+b.dataset.i); start(); } });
+  hero.addEventListener('mouseenter', stop);
+  hero.addEventListener('mouseleave', start);
+  hero.addEventListener('touchstart', stop, {passive:true});
+  hero.addEventListener('touchend', start);
+  hero.addEventListener('focusin', stop);
+  hero.addEventListener('focusout', start);
+  let sx = null, moved = false;
+  hero.addEventListener('pointerdown', e => { sx = e.clientX; moved = false; stop(); });
+  hero.addEventListener('pointerup', e => {
+    if (sx === null) return;
+    const dx = e.clientX - sx; sx = null;
+    if (Math.abs(dx) > 50) { moved = true; go(cur + (dx < 0 ? 1 : -1)); }
+    if (!hero.matches(':hover')) start();
+  });
+  hero.addEventListener('pointercancel', () => { sx = null; start(); });
+  hero.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+  start();
+})();
+
+/* ================= KARTU BERTUMPUK ================= */
+function makeFan(el, items, html, pos, start){
+  let a = start;
+  el.innerHTML = items.map((p,i) => `<div class="fcard" tabindex="0" role="button" aria-label="${esc(p.name)}" data-i="${i}">${html(p)}</div>`).join('');
+  const cards = [...el.children];
+  const desk = () => matchMedia('(min-width:768px)').matches;
+  function layout(){
+    cards.forEach((c,i) => {
+      c.classList.toggle('is-active', i === a);
+      if (!desk()) { c.style.transform = ''; c.style.zIndex = ''; return; }
+      const d = i - a, ab = Math.abs(d), o = pos(d, ab);
+      c.style.transform = `translateX(${o.x}px) translateY(calc(${o.y}px + var(--lift,0px))) rotate(${o.r}deg) scale(${o.s})`;
+      c.style.zIndex = 10 - ab;
+    });
+  }
+  el.addEventListener('click', e => {
+    const d = e.target.closest('[data-detail]');
+    const c = e.target.closest('.fcard'); if (!c) return;
+    if (d) { e.stopPropagation(); openModal(items[+c.dataset.i]); return; }
+    a = +c.dataset.i; layout();
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      a = Math.max(0, Math.min(items.length - 1, a + (e.key === 'ArrowRight' ? 1 : -1)));
+      layout(); cards[a].focus(); e.preventDefault();
+    } else if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('fcard')) {
+      a = +e.target.dataset.i; layout(); e.preventDefault();
+    }
+  });
+  matchMedia('(min-width:768px)').addEventListener('change', layout);
+  layout();
+}
+const condCls = c => c === 'Seperti Baru' ? 'bg-moss text-white' : (c === 'Normal' || c === 'Baru') ? 'bg-[#CFE6A0] text-[#2F5233]' : 'bg-powder text-dark';
+
+makeFan($('#fan'), FAN, p => `
+  <div class="bg-white rounded-2xl p-1.5 border border-black/5 h-full">
+    <div class="relative h-[190px] rounded-xl overflow-hidden bg-powder">${img(p.img, p.name)}
+      <span class="absolute top-2 left-2 text-[8px] font-semibold bg-[#CFE6A0] text-[#2F5233] px-2 py-0.5 rounded-full">Kondisi ${p.cond}</span>
+      <span class="absolute bottom-2 right-2 inline-flex items-center gap-1 text-[8px] font-semibold bg-black/60 backdrop-blur-sm text-white px-2 py-0.5 rounded-full"><span class="text-[#C6E03A]">${ic('pin',8)}</span>${p.campus} ${p.loc}</span>
+    </div>
+    <p class="mt-2 text-[12px] font-semibold text-[#111827] truncate">${p.name}</p>
+    <p class="flex items-baseline gap-2"><b class="text-[13px] font-extrabold text-[#111827]">${rp(p.price)}</b>${p.old ? `<s class="text-[9px] text-[#9CA3AF]">${rp(p.old)}</s>` : ''}</p>
+    <div class="mt-2 flex items-center justify-between gap-2">
+      <span class="text-[8px] text-[#9CA3AF] truncate min-w-0">Pemilik: @${p.seller}</span>
+      <button data-detail class="hit shrink-0 bg-[#1E3A5F] hover:bg-[#274a78] text-white text-[9px] font-semibold px-3 py-1.5 rounded-lg press">Lihat Detail</button>
+    </div>
+  </div>`,
+  (d, ab) => {
+    if (d === 0) return {x:0, y:-12, r:0, s:1.08};
+    const sg = Math.sign(d);
+    return {x: sg * (170 + (ab - 1) * 110), y: ab * 3 + 1, r: sg * (3 + (ab - 1) * 2), s: 1};
+  }, 2);
+
+makeFan($('#stack'), PRODUCTS.slice(0,5), p => `
+  <div class="bg-white rounded-2xl p-1.5 border border-black/5">
+    <div class="relative h-[150px] rounded-xl overflow-hidden bg-powder">${img(p.img, p.name)}
+      <span class="absolute top-2 left-2 text-[9px] font-semibold px-2 py-0.5 rounded-full ${condCls(p.cond)}">${p.cond}</span>
+    </div>
+    <p class="mt-2 px-1 text-[12px] font-semibold text-[#111827] truncate">${p.name}</p>
+    <p class="px-1 serif text-[18px] font-semibold text-glaucous">${rp(p.price)}</p>
+    <div class="px-1 pb-1.5 mt-1 flex items-center justify-between gap-2">
+      <span class="text-[9px] font-semibold bg-[#E4F0CA] text-[#2F5233] px-2 py-0.5 rounded-full truncate">${p.campus}</span>
+      <button data-detail class="hit text-[10px] font-semibold text-glaucous">Lihat detail</button>
+    </div>
+  </div>`,
+  (d, ab) => d === 0 ? {x:0, y:0, r:0, s:1} : {x: d * 46, y: ab * 4, r: d * 3, s: 1}, 0);
+
+$('#features').innerHTML = FEATURES.map(f => `
+  <div class="flex items-center gap-3 bg-white rounded-[14px] px-4 py-3 border border-black/5 shadow-sm">
+    <span class="w-7 h-7 shrink-0 rounded-lg bg-[#E4F0CA] text-[#2F5233] flex items-center justify-center">${ic(f[0],16)}</span>
+    <span class="min-w-0"><b class="block text-[11px] font-bold text-[#111827]">${f[1]}</b><span class="block text-[9px] text-[#6B7280]">${f[2]}</span></span>
+  </div>`).join('');
+
+$('#cats').innerHTML = CATS.map(c => {
+  const count = getCategoryCounts()[c.q] || 0;
+  c.c = count;
+  return `
+    <a href="#/jelajahi?kategori=${c.q}" class="relative shrink-0 snap-start w-[140px] md:w-auto h-[140px] rounded-2xl overflow-hidden bg-dark group press">
+      <div class="absolute inset-0 transition-transform duration-500 group-hover:scale-105">${img(c.img, c.n)}</div>
+      <div class="absolute inset-0" style="background:linear-gradient(0deg,rgba(36,60,44,.85) 0%,rgba(36,60,44,.1) 60%)"></div>
+      <div class="absolute left-3 bottom-3 text-white">
+        <span class="block mb-1">${ic(c.i,16)}</span>
+        <b class="block text-[12px] font-bold leading-tight">${c.n}</b>
+        <span class="text-[9px] text-vanilla">${count} barang</span>
+      </div>
+    </a>`;
+}).join('');
+
+/* ================= KARTU PRODUK (dipakai semua view) ================= */
+const cardHTML = p => `
+  <article class="pcard bg-white rounded-2xl overflow-hidden border border-black/[0.06] cursor-pointer floating-card" data-id="${esc(p.id)}" tabindex="0" role="button" aria-label="Detail ${esc(p.name)}">
+    <div class="relative aspect-[4/3] overflow-hidden bg-powder">${img(p.img, p.name)}
+      <span class="absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full ${condCls(p.cond)}">${esc(p.cond)}</span>
+      <button data-wish="${esc(p.id)}" class="heart ${wish.includes(p.id) ? 'on' : ''} absolute top-0 right-0 w-11 h-11 flex items-center justify-center" aria-label="Simpan ${esc(p.name)}">
+        <span class="w-7 h-7 rounded-full bg-white/90 text-[#6B7280] flex items-center justify-center">${ic('cart',14)}</span>
+      </button>
+    </div>
+    <div class="p-3">
+      <h3 class="text-[13px] font-medium text-[#111827] truncate">${esc(p.name)}</h3>
+      <p class="serif text-[17px] font-semibold text-glaucous">${rp(p.price)}</p>
+      <span class="mt-1.5 inline-block max-w-full truncate text-[10px] font-medium bg-[#E4F0CA] text-[#2F5233] px-2 py-0.5 rounded-full">${esc(p.campus)} · ${esc(p.loc)}</span>
+      <div class="mt-3 flex items-center justify-between gap-2">
+        <p class="text-[10px] text-[#9CA3AF] truncate">@${esc(p.seller)}</p>
+        <button type="button" data-open-detail="${esc(p.id)}" class="text-[10px] font-bold text-glaucous hover:underline">Lihat produk</button>
+      </div>
+    </div>
+  </article>`;
+const soldCardHTML = p => `
+  <article class="pcard bg-[#F3F4F6] rounded-2xl overflow-hidden border border-[#D1D5DB] cursor-pointer opacity-80" data-id="${esc(p.id)}" tabindex="0" role="button" aria-label="Barang habis terjual ${esc(p.name)}">
+    <div class="relative aspect-[4/3] overflow-hidden bg-[#E5E7EB] grayscale">${img(p.img, p.name)}
+      <span class="absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#9CA3AF] text-white">Habis Terjual</span>
+      <span class="absolute top-0 right-0 w-11 h-11 flex items-center justify-center"><span class="w-7 h-7 rounded-full bg-white/80 text-[#6B7280] flex items-center justify-center">${ic('cart',14)}</span></span>
+    </div>
+    <div class="p-3">
+      <h3 class="text-[13px] font-medium text-[#4B5563] truncate">${esc(p.name)}</h3>
+      <p class="serif text-[17px] font-semibold text-[#6B7280]">${rp(p.price)}</p>
+      <span class="mt-1.5 inline-block max-w-full truncate text-[10px] font-medium bg-[#E5E7EB] text-[#4B5563] px-2 py-0.5 rounded-full">${esc(p.campus)} · ${esc(p.loc)}</span>
+      <div class="mt-3 flex items-center justify-between gap-2">
+        <p class="text-[10px] text-[#9CA3AF] truncate">@${esc(p.seller)}</p>
+        <button type="button" data-open-detail="${esc(p.id)}" class="text-[10px] font-bold text-[#6B7280] hover:underline">Lihat produk</button>
+      </div>
+    </div>
+  </article>`;
+function bindCards(el){
+  el.addEventListener('click', e => {
+    const h = e.target.closest('[data-wish]');
+    if (h) { e.stopPropagation(); toggleWish(h.dataset.wish); return; }
+    const detail = e.target.closest('[data-open-detail]');
+    if (detail) { e.stopPropagation(); location.hash = '#/produk?id=' + encodeURIComponent(detail.dataset.openDetail); return; }
+    const c = e.target.closest('[data-id]');
+    if (c) { const p = PRODUCTS.find(p => p.id === c.dataset.id); if (p) openModal(p); }
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.matches('[data-id]')) { const p = PRODUCTS.find(p => p.id === e.target.dataset.id); if (p) openModal(p); }
+  });
+}
+
+/* ================= KAMPUS + FILTER PRODUK (HOME) ================= */
+let campus = null;
+const grid = $('#campusGrid');
+function renderCampus(){
+  grid.innerHTML = CAMPUS.map(c => {
+    const on = campus === c.id;
+    const count = campusStockCount(c.id);
+    return `<button type="button" data-c="${c.id}" aria-pressed="${on}"
+      class="min-w-0 grid grid-cols-[28px_minmax(0,1fr)] lg:grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 text-left rounded-[14px] px-4 py-3.5 min-h-[52px] border border-black/5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition duration-200 press ${on ? 'bg-[#12291C] text-white' : 'bg-white text-[#14261C] hover:-translate-y-0.5'}">
+      <span class="w-7 h-7 rounded-lg flex items-center justify-center text-[9px] font-bold ${on ? 'bg-[#C6E03A] text-[#14261C]' : 'bg-[#DCE6FA] text-[#14261C]'}">${c.ab}</span>
+      <span class="min-w-0"><b class="block truncate text-[13px] font-bold leading-tight">${c.name || c.ab}</b><span class="block truncate text-[8px] ${on ? 'text-white/70' : 'text-[#6B7280]'}">${c.loc}</span></span>
+      <span class="col-start-2 lg:col-start-3 justify-self-start lg:justify-self-end shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-[8px] font-semibold ${on ? 'bg-[#C6E03A] text-[#14261C]' : 'bg-[#EEF0FB] text-[#374151]'}">${count} barang</span>
+    </button>`;
+  }).join('');
+}
+grid.addEventListener('click', e => {
+  const b = e.target.closest('[data-c]'); if (!b) return;
+  campus = campus === b.dataset.c ? null : b.dataset.c;
+  renderCampus(); renderProducts();
+  if (campus) $('#baru').scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'});
+});
+$('#filterReset').addEventListener('click', () => { campus = null; renderCampus(); renderProducts(); });
+
+const MAIN_CAMPUS = ['UNAIR','ITS','PETRA','UBAYA','UKWMS','UC','UNESA','TELKOM'];
+const matchCampus = (p, id) => id === 'LAIN' ? !MAIN_CAMPUS.includes(p.campus) : p.campus === id;
+
+function renderProducts(){
+  renderCampus();
+  const source = campus ? PRODUCTS.filter(p => matchCampus(p, campus)) : PRODUCTS;
+  const list = source.filter(p => !SOLD.has(p.id)).sort((a,b) => b.ts - a.ts);
+  $('#products').innerHTML = list.map(cardHTML).join('');
+  $('#emptyP').classList.toggle('hidden', list.length > 0);
+  const fi = $('#filterInfo');
+  fi.classList.toggle('hidden', !campus); fi.classList.toggle('flex', !!campus);
+  if (campus) { const c = CAMPUS.find(x => x.id === campus); $('#filterName').textContent = c.name || c.ab; }
+  const catWrap = $('#cats');
+  if (catWrap) {
+    catWrap.innerHTML = CATS.map(c => {
+      const count = getCategoryCounts()[c.q] || 0;
+      c.c = count;
+      return `
+        <a href="#/jelajahi?kategori=${c.q}" class="relative shrink-0 snap-start w-[140px] md:w-auto h-[140px] rounded-2xl overflow-hidden bg-dark group press">
+          <div class="absolute inset-0 transition-transform duration-500 group-hover:scale-105">${img(c.img, c.n)}</div>
+          <div class="absolute inset-0" style="background:linear-gradient(0deg,rgba(36,60,44,.85) 0%,rgba(36,60,44,.1) 60%)"></div>
+          <div class="absolute left-3 bottom-3 text-white">
+            <span class="block mb-1">${ic(c.i,16)}</span>
+            <b class="block text-[12px] font-bold leading-tight">${c.n}</b>
+            <span class="text-[9px] text-vanilla">${count} barang</span>
+          </div>
+        </a>`;
+    }).join('');
+  }
+}
+bindCards($('#products'));
+
+/* ================= MODAL DETAIL + CHAT PENJUAL ================= */
+let curP = null;
+function sellerReviewsFor(p){
+  const reviewMap = {
+    naya_ukwms: [{by:'raka_unair', stars:5, text:'Barang sesuai foto, respon cepat, dan aman saat COD.'},{by:'maya_ubaya', stars:5, text:'Penjual ramah, barangnya clean dan siap dipakai.'},{by:'devi_petra', stars:4, text:'Paketnya rapi, proses nego lancar.'}],
+    raka_unair: [{by:'naya_ukwms', stars:5, text:'Meja belajarnya bagus, pengirimannya tepat waktu.'},{by:'budi_its', stars:5, text:'Diskusi mudah dan datengnya sesuai janji.'},{by:'adit_ukwms', stars:4, text:'Barang aman, kualitasnya sesuai deskripsi.'}],
+    sari_petra: [{by:'raka_unair', stars:5, text:'Rice cooker oke, kondisi bersih, dan harga ramah.'},{by:'dino_its', stars:5, text:'Respon cepat dan nego gampang.'},{by:'maya_ubaya', stars:4, text:'Paket rapi, barang aman sampai tujuan.'}],
+    default: [{by:'mahasiswa', stars:5, text:'Barang sesuai deskripsi dan prosesnya nyaman.'},{by:'penjual', stars:5, text:'Respon cepat dan rekomendasi pengiriman jelas.'},{by:'adik_kos', stars:4, text:'Cocok buat kebutuhan kos, tanpa ribet.'}]
+  };
+  return reviewMap[p.seller] || reviewMap.default;
+}
+function openCheckoutDialog(product, orderNo, va, initialVoucherCode = ''){
+  const activeVoucher = me && me.voucher ? normalizeVoucher(me.voucher) : null;
+  const enteredCode = String(initialVoucherCode || (activeVoucher && !activeVoucher.used ? activeVoucher.code : '') || '').trim().toUpperCase();
+  const summary = getShippingVoucherSummary(enteredCode);
+  const voucherIsActive = summary.active;
+  const baseShipping = LALAMOVE_SHIPPING;
+  const voucherDiscount = summary.discount;
+  const shippingFee = summary.finalShipping;
+  const total = product.price + shippingFee;
+  const voucherCode = summary.code;
+  closeModal();
+  openDlg(`
+    <div class="overflow-hidden rounded-[28px] bg-gradient-to-br from-[#F3F8E4] via-white to-[#EEF0FB] p-1">
+      <div class="rounded-[24px] bg-white p-5 shadow-[0_18px_42px_rgba(36,60,44,0.1)]">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-[10px] uppercase tracking-[0.12em] text-[#9AA3B5] font-semibold">Checkout</p>
+            <h3 class="serif text-[24px] font-semibold text-dark">Pembayaran Virtual Account</h3>
+          </div>
+          <span class="rounded-full bg-[#E4F0CA] text-[#2F5233] text-[10px] font-bold px-2 py-1">${esc(product.campus)}</span>
+        </div>
+        <div class="mt-4 rounded-2xl bg-[#F6F4EA] border border-[#E8E4D0] p-4 space-y-2">
+          <div class="flex items-center justify-between text-[12px]"><span class="text-[#6B7280]">Nomor pesanan</span><b>${esc(orderNo)}</b></div>
+          <div class="flex items-center justify-between text-[12px]"><span class="text-[#6B7280]">Barang</span><b>${esc(product.name)}</b></div>
+          <div class="flex items-center justify-between text-[12px]"><span class="text-[#6B7280]">Subtotal</span><b class="text-dark">${rp(product.price)}</b></div>
+        </div>
+        <div class="mt-4 rounded-2xl bg-[#EEF0FB] border border-[#DCE6FA] p-4">
+          <p class="text-[10px] uppercase tracking-[0.1em] text-[#6B7280]">Virtual Account</p>
+          <div class="mt-2 flex items-center justify-between gap-2">
+            <div>
+              <p class="text-[11px] text-[#6B7280]">Bank BCA</p>
+              <b class="block text-[18px] text-dark">${esc(va)}</b>
+            </div>
+            <button type="button" data-copy-va="${esc(va)}" class="min-h-[40px] rounded-xl bg-white border border-black/10 text-[11px] font-semibold text-dark press">Salin</button>
+          </div>
+        </div>
+        <div class="mt-4 rounded-2xl border border-[#E8E4D0] bg-white p-4 ring-1 ring-[#F3F4F6]">
+          <p class="text-[10px] uppercase tracking-[0.12em] text-[#6B7280]">Kode voucher</p>
+          <div class="mt-2 flex gap-2">
+            <input id="voucherCheckoutInput" value="${esc(enteredCode || '')}" class="inp flex-1 uppercase" placeholder="Masukkan kode voucher" maxlength="20" aria-label="Kode voucher" />
+            <button type="button" data-apply-voucher data-product-id="${esc(product.id)}" data-order-no="${esc(orderNo)}" data-va="${esc(va)}" class="min-h-[44px] rounded-xl bg-[#E4F0CA] text-[#2F5233] text-[11px] font-bold px-3 press">Terapkan</button>
+          </div>
+          <div class="mt-4 space-y-2 text-[12px] text-[#374151]">
+            <div class="flex items-center justify-between"><span>Ongkir Lalamove</span><b>${rp(baseShipping)}</b></div>
+            <div class="flex items-center justify-between"><span>Diskon voucher 20%</span><b class="text-[#2F5233]">-${rp(voucherDiscount)}</b></div>
+            <div class="flex items-center justify-between pt-2 border-t border-black/5 text-[14px] font-bold text-dark"><span>Total</span><b>${rp(total)}</b></div>
+          </div>
+          ${voucherIsActive ? '<p class="mt-3 text-[11px] font-semibold text-[#2F5233]">Voucher aktif: ' + esc(voucherCode) + '</p>' : '<p class="mt-3 text-[11px] text-[#6B7280]">Gunakan kode ' + esc(voucherCode) + ' untuk diskon 20% ongkir pengiriman pertama.</p>'}
+        </div>
+        <div class="mt-5 flex gap-2">
+          <button type="button" data-dlg-close class="flex-1 min-h-[44px] rounded-xl border border-black/15 text-[13px] font-semibold text-dark press">Tutup</button>
+          <a href="#/chat?new=${encodeURIComponent(product.id)}" data-confirm-purchase="${esc(product.id)}" data-order-no="${esc(orderNo)}" data-va="${esc(va)}" class="flex-1 min-h-[44px] rounded-xl bg-gradient-to-r from-[#7A9445] to-[#59789F] text-white text-[13px] font-bold shadow-md shadow-[#7A9445]/20 press inline-flex items-center justify-center">Konfirmasi</a>
+        </div>
+      </div>
+    </div>` , true);
+}
+
+function renderDetailPage(id){
+  const product = PRODUCTS.find(item => item.id === id) || FAN.find(item => item.id === id);
+  const root = $('#detailPage');
+  if (!product) {
+    root.innerHTML = `
+      <div class="p-8 text-center">
+        <p class="serif text-[26px] font-semibold text-dark">Produk tidak ditemukan.</p>
+        <p class="mt-2 text-[13px] text-[#6B7280]">Barang ini mungkin sudah terjual atau belum tersedia lagi.</p>
+      </div>`;
+    return;
+  }
+  const sold = SOLD.has(product.id);
+  const reviews = sellerReviewsFor(product);
+  const avg = reviews.reduce((sum, r) => sum + r.stars, 0) / reviews.length;
+  const related = PRODUCTS.filter(item => item.id !== product.id && item.campus === product.campus).slice(0,4);
+  root.innerHTML = `
+    <div class="grid lg:grid-cols-[1.15fr_0.85fr]">
+      <div class="relative min-h-[420px] bg-powder">
+        <img src="${product.img || PH}" alt="${esc(product.name)}" class="w-full h-full object-cover ${sold ? 'grayscale opacity-80' : ''}">
+        <span class="absolute top-4 left-4 text-[10px] font-semibold px-2.5 py-1 rounded-full ${sold ? 'bg-[#9CA3AF] text-white' : condCls(product.cond)}">${sold ? 'Habis Terjual' : esc(product.cond)}</span>
+      </div>
+      <div class="p-5 md:p-8">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="type-pill">${esc(product.campus)}</span>
+          <span class="type-pill">${esc(product.loc)}</span>
+        </div>
+        <h1 class="serif text-[30px] md:text-[36px] font-semibold text-dark leading-tight">${esc(product.name)}</h1>
+        <p class="mt-3 serif text-[28px] md:text-[32px] font-semibold ${sold ? 'text-[#6B7280]' : 'text-glaucous'}">${rp(product.price)}</p>
+        <p class="mt-4 text-[13px] leading-relaxed text-[#374151]">Kondisi barang ${esc(product.cond.toLowerCase())}. Cocok untuk kebutuhan kos, tinggal cek langsung di lokasi ${esc(product.loc)}. Pemilik responsif dan bisa nego sesuai kesepakatan.</p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          ${(product.tx || ['COD','Meet-up']).map(v => `<span class="type-pill">${esc(v)}</span>`).join('')}
+        </div>
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          <button type="button" data-buy-detail="${esc(product.id)}" class="min-h-[48px] rounded-xl ${sold ? 'bg-[#E5E7EB] text-[#6B7280] cursor-not-allowed' : 'bg-glaucous text-white'} font-bold text-[13px] press" ${sold ? 'disabled' : ''}>${sold ? 'Habis Terjual' : 'Beli'}</button>
+          <button type="button" data-wish="${esc(product.id)}" class="min-h-[48px] rounded-xl border border-black/15 ${sold ? 'bg-[#F3F4F6] text-[#6B7280] cursor-not-allowed' : 'bg-[#F6F4EA] text-dark'} font-bold text-[13px] press" ${sold ? 'disabled' : ''}>${sold ? 'Tidak tersedia' : wish.includes(product.id) ? 'Tersimpan' : 'Simpan'}</button>
+        </div>
+        <div class="mt-6 rounded-2xl bg-[#F6F4EA] border border-[#E8E4D0] p-4">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-[10px] uppercase tracking-[0.12em] text-[#9AA3B5] font-semibold">Penjual</p>
+              <b class="block text-[15px] text-dark mt-1">@${esc(product.seller)}</b>
+            </div>
+            <span class="text-[12px] font-bold text-[#E0A800]">${stars(avg)}</span>
+          </div>
+          <ul class="mt-3 space-y-2 text-[12px] text-[#374151]">
+            ${reviews.slice(0,3).map(r => `<li class="flex items-start gap-2"><span class="text-[#E0A800] mt-0.5">★</span><span>${esc(r.text)}</span></li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-black/[0.06] px-5 md:px-8 py-6">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="serif text-[24px] font-semibold text-dark">Barang lain di kampus yang sama</h2>
+        <a href="#/jelajahi?kampus=${encodeURIComponent(product.campus)}" class="text-[12px] font-bold text-glaucous hover:underline">Lihat semua</a>
+      </div>
+      <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4">
+        ${related.map(item => `
+          <article class="bg-[#F8F8FB] rounded-2xl overflow-hidden border border-black/[0.05]">
+            <img src="${item.img || PH}" alt="${esc(item.name)}" class="w-full h-32 object-cover">
+            <div class="p-3">
+              <p class="text-[12px] font-semibold text-[#111827] truncate">${esc(item.name)}</p>
+              <p class="mt-1 serif text-[16px] font-semibold text-glaucous">${rp(item.price)}</p>
+              <button type="button" data-open-detail="${esc(item.id)}" class="mt-2 text-[10px] font-bold text-glaucous hover:underline">Lihat detail</button>
+            </div>
+          </article>
+        `).join('') || '<p class="text-[12px] text-[#6B7280] col-span-full">Belum ada barang lain dari kampus ini.</p>'}
+      </div>
+    </div>`;
+  const wishBtns = root.querySelectorAll('[data-wish]');
+  wishBtns.forEach(btn => btn.addEventListener('click', () => {
+    if (sold) { toast('Barang ini sudah habis terjual.'); return; }
+    toggleWish(btn.dataset.wish); const b = root.querySelector('[data-wish="'+btn.dataset.wish+'"]'); if (b) b.textContent = wish.includes(btn.dataset.wish) ? 'Tersimpan' : 'Simpan';
+  }));
+  const buy = root.querySelector('[data-buy-detail]');
+  if (buy) buy.addEventListener('click', () => {
+    if (sold) { toast('Barang ini sudah habis terjual.'); return; }
+    const p = PRODUCTS.find(item => item.id === buy.dataset.buyDetail) || FAN.find(item => item.id === buy.dataset.buyDetail);
+    if (p) {
+      const orderNo = 'PA-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Math.floor(Math.random()*9000)+1000);
+      const va = '8808' + String(Math.floor(Math.random()*900000000)+100000000);
+      openCheckoutDialog(p, orderNo, va);
+    }
+  });
+  root.querySelectorAll('[data-open-detail]').forEach(btn => btn.addEventListener('click', () => {
+    location.hash = '#/produk?id=' + encodeURIComponent(btn.dataset.openDetail);
+  }));
+}
+function openModal(p){
+  curP = p;
+  const sold = SOLD.has(p.id);
+  $('#mImg').src = p.img || PH; $('#mImg').onerror = function(){ this.onerror = null; this.src = PH; };
+  $('#mImg').classList.toggle('grayscale', sold);
+  $('#mName').textContent = p.name;
+  $('#mPrice').textContent = rp(p.price);
+  const cEl = $('#mCond'); cEl.textContent = sold ? 'Habis Terjual' : 'Kondisi ' + p.cond; cEl.className = 'text-[10px] font-semibold px-2.5 py-1 rounded-full ' + (sold ? 'bg-[#9CA3AF] text-white' : condCls(p.cond));
+  $('#mMeta').textContent = `${p.campus} · ${p.loc}`;
+  $('#mSeller').textContent = `Penjual: @${p.seller}`;
+  $('#mFull').href = '#/produk?id=' + encodeURIComponent(p.id);
+  $('#mSave').textContent = sold ? 'Tidak tersedia' : (wish.includes(p.id) ? 'Tersimpan' : 'Simpan');
+  $('#mSave').disabled = sold;
+  $('#mSave').classList.toggle('opacity-60', sold);
+  $('#mBuy').textContent = sold ? 'Habis Terjual' : 'Beli';
+  $('#mBuy').disabled = sold;
+  $('#mBuy').classList.toggle('opacity-60', sold);
+  $('#mChat').disabled = sold;
+  $('#mChat').classList.toggle('opacity-60', sold);
+  const avg = sellerReviewsFor(p).reduce((s, r) => s + r.stars, 0) / sellerReviewsFor(p).length;
+  $('#mReviews').innerHTML = `
+    <div class="flex items-center justify-between gap-2">
+      <b class="text-[12px] font-bold text-dark">Review penjual</b>
+      <span class="text-[#E0A800] tracking-wider">${stars(avg)}</span>
+    </div>
+    <ul class="mt-2 space-y-1.5">
+      ${sellerReviewsFor(p).slice(0,2).map(r => `<li class="flex items-start gap-2"><span class="text-[#E0A800] mt-[1px]">★</span><span>${esc(r.text)}</span></li>`).join('')}
+    </ul>`;
+  const m = $('#modal'); m.classList.remove('hidden'); m.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+  $('#mClose').focus();
+}
+function closeModal(){
+  const m = $('#modal'); if (m.classList.contains('hidden')) return;
+  m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow = '';
+}
+$('#mClose').addEventListener('click', closeModal);
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+$('#mSave').addEventListener('click', () => {
+  if (!curP || SOLD.has(curP.id)) { toast('Barang ini sudah habis terjual.'); return; }
+  toggleWish(curP.id);
+  $('#mSave').textContent = wish.includes(curP.id) ? 'Tersimpan' : 'Simpan';
+});
+$('#mBuy').addEventListener('click', () => {
+  if (!curP || SOLD.has(curP.id)) { toast('Barang ini sudah habis terjual.'); return; }
+  const orderNo = 'PA-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Math.floor(Math.random()*9000)+1000);
+  const va = '8808' + String(Math.floor(Math.random()*900000000)+100000000);
+  openCheckoutDialog(curP, orderNo, va);
+});
+$('#mChat').addEventListener('click', () => {
+  if (!curP || SOLD.has(curP.id)) { toast('Barang ini sudah habis terjual.'); return; }
+  const target = '#/chat?new=' + encodeURIComponent(curP.id);
+  closeModal();
+  if (!me) { toast('Masuk dulu biar bisa chat penjual.'); location.hash = '#/masuk?next=' + encodeURIComponent(target); return; }
+  location.hash = target;
+});
+
+/* ================= TESTIMONI CTA + REVEAL ================= */
+(function(){
+  let i = 0; const box = $('#testi');
+  const set = () => { const t = TESTI[i]; $('#tAv').textContent = t.av; $('#tQ').textContent = t.q; $('#tW').textContent = t.w; };
+  set();
+  setInterval(() => { box.style.opacity = 0; setTimeout(() => { i = (i + 1) % TESTI.length; set(); box.style.opacity = 1; }, 300); }, 5000);
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.15});
+  document.querySelectorAll('.reveal,.reveal-img').forEach(el => io.observe(el));
+})();
+
+
+/* ╔════════════════════════════════════════════════════════════╗
+   ║  JS JELAJAHI (state, filter, sheet)                         ║
+   ╚════════════════════════════════════════════════════════════╝ */
+const PRICES = [['u50','Di bawah Rp50.000'],['50-100','Rp50.000 - Rp100.000'],['100-250','Rp100.000 - Rp250.000'],['250-500','Rp250.000 - Rp500.000'],['o500','Di atas Rp500.000']];
+const CONDS = ['Seperti Baru','Sangat Baik','Baik','Layak Pakai'];
+const TXS = ['COD','Meet-up','Delivery'];
+const inPrice = (n, k) => ({ 'u50': n < 50000, '50-100': n >= 50000 && n <= 100000, '100-250': n > 100000 && n <= 250000, '250-500': n > 250000 && n <= 500000, 'o500': n > 500000 })[k];
+const catName = id => (CATS.find(c => c.q === id) || {}).n || '';
+
+const defaults = () => ({q:'', campus:'', locs:new Set(), cat:'', price:'', conds:new Set(), tx:new Set(), sort:'baru'});
+let F = defaults();
+
+function filtered(){
+  const terms = F.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const list = PRODUCTS.filter(p => {
+    if (F.campus && !matchCampus(p, F.campus)) return false;
+    if (F.locs.size && !F.locs.has(p.loc)) return false;
+    if (F.cat && p.cat !== F.cat) return false;
+    if (F.price && !inPrice(p.price, F.price)) return false;
+    if (F.conds.size && !F.conds.has(p.cond)) return false;
+    if ([...F.tx].some(t => !p.tx.includes(t))) return false;
+    if (terms.length) {
+      const hay = [p.name, p.campus, p.loc, p.seller, catName(p.cat)].join(' ').toLowerCase();
+      if (!terms.every(t => hay.includes(t))) return false;
+    }
+    return true;
+  });
+  if (F.sort === 'murah') list.sort((a,b) => a.price - b.price);
+  else if (F.sort === 'mahal') list.sort((a,b) => b.price - a.price);
+  else list.sort((a,b) => b.ts - a.ts);
+  return list;
+}
+const activeCount = () => (F.campus ? 1 : 0) + F.locs.size + (F.cat ? 1 : 0) + (F.price ? 1 : 0) + F.conds.size + F.tx.size;
+
+function filterHTML(m){
+  const sz = m ? 'px-4 min-h-[44px] text-[13px]' : 'px-3 py-1.5 text-[11px] hit';
+  const chip = (label, on, cls, f, v) =>
+    `<button type="button" data-f="${f}" data-v="${esc(v)}" data-k="${f}-${esc(v) || 'all'}" aria-pressed="${on}" class="chip ${sz} ${on ? cls : ''}">${esc(label)}</button>`;
+  const grp = t => `<h3 class="mt-5 mb-2 text-[12px] font-semibold text-dark">${t}</h3>`;
+  const row = m ? 'flex items-center gap-3 min-h-[44px] text-[13px] text-[#374151] cursor-pointer' : 'hit flex items-center gap-2 py-1 text-[11px] text-[#374151] cursor-pointer';
+  const inp = m ? 'w-5 h-5' : 'w-3.5 h-3.5';
+
+  const campusChips = [['', 'Semua'], ...CAMPUS.map(c => [c.id, c.name || c.ab])]
+    .map(([id, l]) => chip(l, (F.campus || '') === id, 'on-dark', 'campus', id)).join('');
+
+  const locs = F.campus && F.campus !== 'LAIN' ? [...new Set(PRODUCTS.filter(p => p.campus === F.campus).map(p => p.loc))] : [];
+  const locBlock = locs.length ? grp('Lokasi') + `<div class="flex flex-wrap gap-2">` +
+    chip('Semua lokasi', F.locs.size === 0, 'on-dark', 'loc', '') +
+    locs.map(l => chip(l, F.locs.has(l), 'on-dark', 'loc', l)).join('') + `</div>` : '';
+
+  const catChips = [['', 'Semua'], ...CATS.map(c => [c.q, c.n])]
+    .map(([id, l]) => chip(l, F.cat === id, 'on-moss', 'cat', id)).join('');
+
+  const priceRows = PRICES.map(([id, l]) =>
+    `<label class="${row}"><input type="radio" name="price${m ? 'M' : 'D'}" class="${inp}" data-f="price" data-v="${id}" data-k="price-${id}" ${F.price === id ? 'checked' : ''}>${l}</label>`).join('');
+
+  const condRows = CONDS.map(l =>
+    `<label class="${row}"><input type="checkbox" class="${inp}" data-f="cond" data-v="${l}" data-k="cond-${l}" ${F.conds.has(l) ? 'checked' : ''}>${l}</label>`).join('');
+
+  const txChips = TXS.map(l => chip(l, F.tx.has(l), 'on-blue', 'tx', l)).join('');
+
+  const head = m ? '' : `<div class="flex items-baseline justify-between">
+      <h2 class="text-[13px] font-semibold text-dark">Filter</h2>
+      <button data-reset class="hit text-[10px] text-[#9AA3B5] hover:text-dark">Reset semua</button></div>`;
+
+  return `${head}
+    ${grp('Kampus')}<div class="flex flex-wrap gap-2">${campusChips}</div>
+    ${locBlock}
+    ${grp('Kategori')}<div class="flex flex-wrap gap-2">${catChips}</div>
+    ${grp('Harga')}<div>${priceRows}</div>
+    ${grp('Kondisi')}<div>${condRows}</div>
+    ${grp('Transaksi')}<div class="flex flex-wrap gap-2">${txChips}</div>`;
+}
+
+function renderJ(){
+  const list = filtered();
+  const soldList = list.filter(p => SOLD.has(p.id));
+  const activeList = list.filter(p => !SOLD.has(p.id));
+  const ae = document.activeElement;
+  const key = ae && ae.dataset ? ae.dataset.k : null;
+  const boxId = ae && ae.closest ? (ae.closest('#filterDesk,#filterSheet') || {}).id : null;
+
+  $('#filterDesk').innerHTML = filterHTML(false);
+  $('#filterSheet').innerHTML = filterHTML(true);
+  if (key && boxId) { const t = document.querySelector(`#${boxId} [data-k="${key}"]`); if (t) t.focus(); }
+
+  $('#jCount').innerHTML = `<b class="font-bold text-glaucous">${list.length}</b> barang ditemukan`;
+  const productsHtml = [
+    activeList.map(cardHTML).join(''),
+    soldList.length ? `<div class="col-span-full mt-2 mb-1 pt-4 border-t border-black/5"><p class="text-[11px] font-bold uppercase tracking-[0.12em] text-[#6B7280]">Barang habis terjual</p></div>` + soldList.map(soldCardHTML).join('') : ''
+  ].join('');
+  $('#jProducts').innerHTML = productsHtml;
+  $('#jEmpty').classList.toggle('hidden', list.length > 0);
+  $('#sheetApply').textContent = `Tampilkan ${list.length} barang`;
+
+  const n = activeCount(), b = $('#fBadge');
+  b.textContent = n; b.classList.toggle('hidden', n === 0);
+
+  const jq = $('#jq'); if (document.activeElement !== jq) jq.value = F.q;
+  $('#jSort').value = F.sort;
+
+  const p = new URLSearchParams();
+  if (F.q) p.set('q', F.q);
+  if (F.campus) p.set('kampus', F.campus);
+  if (F.cat) p.set('kategori', F.cat);
+  history.replaceState(null, '', '#/jelajahi' + (p.toString() ? '?' + p : ''));
+}
+
+function setF(k, v){
+  const tog = (set, x) => set.has(x) ? set.delete(x) : set.add(x);
+  if (k === 'campus') { F.campus = (F.campus === v ? '' : v); F.locs.clear(); }
+  else if (k === 'loc') { v ? tog(F.locs, v) : F.locs.clear(); }
+  else if (k === 'cat') F.cat = v;
+  else if (k === 'price') F.price = (F.price === v ? '' : v);
+  else if (k === 'cond') tog(F.conds, v);
+  else if (k === 'tx') tog(F.tx, v);
+  renderJ();
+}
+const resetF = () => { F = defaults(); renderJ(); };
+
+[$('#filterDesk'), $('#filterSheet')].forEach(box => box.addEventListener('click', e => {
+  const el = e.target.closest('[data-f]'); if (el) setF(el.dataset.f, el.dataset.v);
+}));
+document.addEventListener('click', e => { if (e.target.closest('[data-reset]')) resetF(); });
+
+let jT;
+$('#jq').addEventListener('input', e => { clearTimeout(jT); jT = setTimeout(() => { F.q = e.target.value; renderJ(); }, 150); });
+$('#jForm').addEventListener('submit', e => { e.preventDefault(); F.q = $('#jq').value; renderJ(); $('#jq').blur(); });
+$('#jSort').addEventListener('change', e => { F.sort = e.target.value; renderJ(); });
+bindCards($('#jProducts'));
+
+function openSheet(){
+  const s = $('#sheet'); s.classList.add('open'); s.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden'; $('#sheetClose').focus();
+}
+function closeSheet(){
+  const s = $('#sheet'); if (!s.classList.contains('open')) return;
+  s.classList.remove('open'); s.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = ''; $('#fOpen').focus({preventScroll:true});
+}
+$('#fOpen').addEventListener('click', openSheet);
+$('#sheetClose').addEventListener('click', closeSheet);
+$('#sheetApply').addEventListener('click', closeSheet);
+$('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { sg.classList.add('hidden'); closeModal(); closeSheet(); closeDlg(); $('#acctMenu').classList.add('hidden'); } });
+
+
+/* ╔════════════════════════════════════════════════════════════╗
+   ║  JS JUAL (form, foto, preview, publish)                     ║
+   ╚════════════════════════════════════════════════════════════╝ */
+const J = {photos:[], name:'', cat:'', price:'', cond:'', desc:'', campus:'', meet:'', nego:'Ya', tx:new Set()};
+const resetJ = () => { Object.assign(J, {photos:[], name:'', cat:'', price:'', cond:'', desc:'', campus:'', meet:'', nego:'Ya', tx:new Set()}); ['jName','jPrice','jDesc','jMeet'].forEach(id => $('#'+id).value = ''); renderJChips(); renderThumbs(); showJualStep('form'); };
+const jValid = () => J.name.trim().length >= 3 && J.cat && +J.price > 0 && J.cond && J.campus;
+
+function renderJChips(){
+  const c = (label, on, f, v, extra='') => `<button type="button" data-j="${f}" data-v="${esc(v)}" aria-pressed="${on}" class="chip ${extra || 'px-3.5 py-2 text-[11px] hit'} ${on ? 'on-dark' : ''}">${label}</button>`;
+  $('#jCat').innerHTML = CATS.map(x => c(`<span class="mr-1.5">${ic(x.i,13)}</span>${x.n}`, J.cat === x.q, 'cat', x.q)).join('');
+  $('#jCond').innerHTML = CONDS.map(x => c(x, J.cond === x, 'cond', x)).join('');
+  $('#jCampus').innerHTML = CAMPUS.map(x => c(x.name || x.ab, J.campus === x.id, 'campus', x.id)).join('');
+  $('#jNego').innerHTML = ['Ya','Nggak'].map(x => c(x, J.nego === x, 'nego', x, 'px-6 min-h-[44px] text-[12px] font-semibold')).join('');
+  $('#jTx').innerHTML = TXS.map(x => c(x, J.tx.has(x), 'tx', x)).join('');
+  updateJBtn();
+}
+function updateJBtn(){
+  const ok = !!jValid(), b = $('#jNext');
+  b.disabled = !ok;
+  b.className = 'mt-8 w-full min-h-[48px] rounded-full text-white text-[13px] font-bold transition ' + (ok ? 'bg-glaucous hover:bg-[#6a89b0] press' : 'bg-[#C5CAD1] cursor-not-allowed');
+  $('#jHint').textContent = ok ? 'Udah lengkap. Cek preview dulu sebelum tayang.' : 'Isi nama, kategori, harga, kondisi, dan kampus dulu ya.';
+}
+$('#view-jual').addEventListener('click', e => {
+  const b = e.target.closest('[data-j]');
+  if (b) {
+    const f = b.dataset.j, v = b.dataset.v;
+    if (f === 'tx') (J.tx.has(v) ? J.tx.delete(v) : J.tx.add(v));
+    else J[f] = (J[f] === v && f !== 'nego') ? '' : v;
+    renderJChips(); return;
+  }
+  const g = e.target.closest('[data-go]');
+  if (g) { const t = document.getElementById(g.dataset.go); if (t) t.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'}); }
+});
+$('#jName').addEventListener('input', e => { J.name = e.target.value; updateJBtn(); });
+$('#jPrice').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g,''); J.price = e.target.value; updateJBtn(); });
+$('#jDesc').addEventListener('input', e => { J.desc = e.target.value; });
+$('#jMeet').addEventListener('input', e => { J.meet = e.target.value; });
+
+/* foto: dikecilkan ke max 640px (JPEG) supaya muat di localStorage */
+function fileToDataURL(file, max = 640){
+  return new Promise((res, rej) => {
+    const fr = new FileReader(); fr.onerror = rej;
+    fr.onload = () => {
+      const im = new Image(); im.onerror = rej;
+      im.onload = () => {
+        const s = Math.min(1, max / Math.max(im.width, im.height));
+        const c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        res(c.toDataURL('image/jpeg', .72));
+      };
+      im.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+async function addPhotos(files){
+  for (const f of files) {
+    if (J.photos.length >= 5) { toast('Maksimal 5 foto ya.'); break; }
+    if (!/^image\/(jpeg|png)$/.test(f.type)) { toast('Format foto harus JPG atau PNG.'); continue; }
+    if (f.size > 8 * 1024 * 1024) { toast('Satu foto maksimal 8 MB.'); continue; }
+    try { J.photos.push(await fileToDataURL(f)); } catch { toast('Fotonya gagal dibaca.'); }
+  }
+  renderThumbs();
+}
+function renderThumbs(){
+  $('#thumbs').innerHTML = J.photos.map((src, i) => `
+    <div class="relative aspect-square rounded-xl overflow-hidden bg-powder">
+      <img src="${src}" alt="Foto ${i+1}" class="w-full h-full object-cover">
+      ${i === 0 ? '<span class="absolute left-1 bottom-1 text-[8px] font-bold bg-black/60 text-white rounded px-1.5 py-0.5">Utama</span>' : ''}
+      <button type="button" data-rm="${i}" class="absolute top-0 right-0 w-8 h-8 flex items-center justify-center" aria-label="Hapus foto ${i+1}"><span class="w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center">${ic('x',11)}</span></button>
+    </div>`).join('');
+}
+$('#thumbs').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (b) { J.photos.splice(+b.dataset.rm, 1); renderThumbs(); } });
+const dz = $('#dz');
+dz.addEventListener('click', () => $('#photoIn').click());
+dz.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#photoIn').click(); } });
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('border-glaucous'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('border-glaucous'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('border-glaucous'); addPhotos([...e.dataTransfer.files]); });
+$('#photoIn').addEventListener('change', e => { addPhotos([...e.target.files]); e.target.value = ''; });
+
+function showJualStep(s){ $('#jualForm').classList.toggle('hidden', s !== 'form'); $('#jualPrev').classList.toggle('hidden', s !== 'prev'); window.scrollTo({top:0, behavior:'instant'}); }
+function buildListing(){
+  return {id:'u' + Date.now(), name:J.name.trim(), price:+J.price, cond:J.cond, campus: J.campus === 'LAIN' ? 'Lainnya' : J.campus,
+          loc:J.meet.trim() || 'Titik temu disepakati', seller: me ? me.username : 'kamu', img:J.photos[0] || '', imgs:J.photos.slice(),
+          cat:J.cat, tx: J.tx.size ? [...J.tx] : ['COD'], ts:Date.now(), desc:J.desc.trim(), nego:J.nego === 'Ya', own:true};
+}
+$('#jNext').addEventListener('click', () => {
+  if (!jValid()) return;
+  const pv = buildListing();
+  $('#pvCard').innerHTML = cardHTML(pv);
+  $('#pvInfo').innerHTML = [
+    ['Kategori', catName(pv.cat)], ['Kondisi', pv.cond], ['Kampus', pv.campus], ['Titik temu', pv.loc],
+    ['Bisa nego', pv.nego ? 'Ya' : 'Nggak'], ['Transaksi', pv.tx.join(', ')], ['Deskripsi', pv.desc || '-']
+  ].map(([k, v]) => `<div><dt class="text-[10px] uppercase tracking-wider text-[#9AA3B5] font-semibold">${k}</dt><dd class="text-[#374151] break-words">${esc(v)}</dd></div>`).join('');
+  $('#pvPrice').textContent = rp(pv.price);
+  $('#pvFee').textContent = rp(pv.price * 0.04);
+  $('#pvAgree').checked = false;
+  showJualStep('prev');
+});
+$('#pvBack').addEventListener('click', () => showJualStep('form'));
+$('#pvPublish').addEventListener('click', () => {
+  if (!me) { toast('Masuk dulu biar barangmu bisa tayang.'); location.hash = '#/masuk?next=' + encodeURIComponent('#/jual'); return; }
+  if (!$('#pvAgree').checked) { toast('Centang dulu persetujuan komisinya ya.'); return; }
+  const p = buildListing();
+  const list = store.get('pa_listings', []); list.push(p);
+  if (!store.set('pa_listings', list)) { toast('Penyimpanan browser penuh. Kurangi jumlah atau ukuran foto.'); return; }
+  PRODUCTS.push(p); resetJ(); renderProducts();
+  toast('Barangmu udah tayang. Siapa tahu besok laku.');
+  location.hash = '#/profil?tab=dijual';
+});
+
+
+/* ╔════════════════════════════════════════════════════════════╗
+   ║  JS WISHLIST                                                ║
+   ╚════════════════════════════════════════════════════════════╝ */
+function renderWish(){
+  const list = wish.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+  $('#wSub').textContent = list.length ? `${list.length} barang · Siapa tahu besok tiba-tiba butuh.` : '';
+  $('#wClear').classList.toggle('hidden', !list.length);
+  $('#wGrid').innerHTML = list.map(cardHTML).join('');
+  $('#wEmpty').classList.toggle('hidden', list.length > 0);
+}
+bindCards($('#wGrid'));
+$('#wClear').addEventListener('click', () => askConfirm('Hapus semua?', 'Semua barang yang kamu simpan bakal dihapus dari daftar ini.', 'Hapus semua', () => {
+  wish = []; store.set('pa_wish', wish); updateBadge();
+  document.querySelectorAll('[data-wish].on').forEach(b => b.classList.remove('on'));
+  renderWish(); toast('Daftar simpananmu dikosongkan.');
+}));
+
+
+/* ╔════════════════════════════════════════════════════════════╗
+   ║  JS CHAT (room per penjual+produk, serah terima)            ║
+   ╚════════════════════════════════════════════════════════════╝ */
+const LM_STEPS = ['Menunggu Pembayaran','Dibayar','Kurir Menjemput','Dalam Pengiriman','Selesai'];
+const LM_SIZES = [['Kecil','Motor'],['Sedang','Motor + box'],['Besar','Mobil / van']];
+const ongkir = (km, size) => 10000 + Math.max(0, Math.ceil(km - 3)) * 2500 + (size === 'Sedang' ? 5000 : size === 'Besar' ? 25000 : 0);
+const MEET = {UKWMS:'Lobby Kampus Kalijudan', UNESA:'Gerbang Kampus Ketintang', UNAIR:'Gerbang Kampus B', ITS:'Gerbang Utama ITS Sukolilo', PETRA:'Lobby Kampus Siwalankerto', UBAYA:'Gerbang Kampus Tenggilis', UC:'Lobby Kampus UC'};
+
+let ROOMS = {}, ACTIVE = null;
+const roomsKey = () => 'pa_rooms_' + (me ? me.id : 'guest');
+const saveRooms = () => { if (me) store.set(roomsKey(), ROOMS); };
+const chatVisible = () => !$('#view-chat').classList.contains('hidden');
+const sortedKeys = () => Object.keys(ROOMS).sort((a,b) => ROOMS[b].updated - ROOMS[a].updated);
+const unreadTotal = () => Object.values(ROOMS).reduce((n, r) => n + (r.unread || 0), 0);
+function updateChatDot(){ $('#chatDot').classList.toggle('hidden', !(me && unreadTotal() > 0)); }
+
+const baseRoom = p => ({seller:p.seller, product:{id:p.id, name:p.name, price:p.price, img:p.img, cond:p.cond, campus:p.campus, loc:p.loc},
+  cod:'Negosiasi', method:null, lm:null, ho:{open:false, tab:'COD', meet:'', size:'Kecil', km:4, addr:''}, unread:0, updated:Date.now(), messages:[]});
+function seedRooms(){
+  const now = Date.now(), min = 60000;
+  const mk = (pid, msgs, unread) => { const r = baseRoom(PRODUCTS.find(x => x.id === pid)); r.messages = msgs.map(([f,t,ago]) => ({from:f, text:t, t:now - ago*min})); r.unread = unread; r.updated = r.messages[r.messages.length-1].t; return r; };
+  return {
+    'sari_petra-p3': mk('p3', [['me','Hi kak, ini masih ada?',25],['them','Masih kak.',23],['me','Bisa COD sekitar PETRA?',22],['them','Bisa dong, area kampus aja.',20]], 1),
+    'raka_unair-p2': mk('p2', [['me','Halo kak, meja belajarnya masih ada?',1500],['them','Masih kak.',1490],['me','Bisa nego nggak?',1480],['them','Boleh, kalau ambil hari ini.',1470]], 0)
+  };
+}
+function loadRooms(){
+  if (!me) { ROOMS = {}; return; }
+  const r = store.get(roomsKey(), null);
+  if (r) ROOMS = r;
+  else { ROOMS = me.username === 'naya_ukwms' ? seedRooms() : {}; saveRooms(); }
+}
+function pushMsg(r, from, text){ r.messages.push({from, text, t:Date.now()}); r.updated = Date.now(); saveRooms(); }
+function replyFor(text){
+  const t = text.toLowerCase();
+  if (/nego|tawar|kurang|jadi rp/.test(t)) return 'Boleh kak, kalau ambil hari ini ya.';
+  if (/lalamove|kirim|delivery|ongkir/.test(t)) return 'Bisa kak, ongkirnya lewat Lalamove ya.';
+  if (/cod|ketemu|temu|kampus/.test(t)) return 'Bisa dong, area kampus aja.';
+  if (/ada|masih|ready/.test(t)) return 'Masih kak.';
+  return 'Siap kak.';
+}
+function autoReply(key, text, delay = 1100){
+  setTimeout(() => {
+    const r = ROOMS[key]; if (!r) return;
+    pushMsg(r, 'them', text);
+    if (!(ACTIVE === key && chatVisible())) r.unread = (r.unread || 0) + 1;
+    saveRooms();
+    if (chatVisible()) { if (ACTIVE === key) renderThread(); renderRoomList(); }
+    updateChatDot();
+  }, delay);
+}
+
+function renderRoomList(){
+  const keys = sortedKeys();
+  $('#roomList').innerHTML = keys.length ? keys.map(k => {
+    const r = ROOMS[k], on = k === ACTIVE;
+    const last = [...r.messages].reverse().find(m => m.from !== 'sys') || {text:''};
+    return `<button data-room="${esc(k)}" class="w-full text-left flex gap-2.5 px-4 py-3 min-h-[64px] border-l-[3px] ${on ? 'bg-white border-moss' : 'border-transparent hover:bg-white/60'}">
+      <span class="w-9 h-9 shrink-0 rounded-full text-white text-[13px] font-bold flex items-center justify-center" style="background:${avColor(r.seller)}">${esc(r.seller[0].toUpperCase())}</span>
+      <span class="min-w-0 flex-1">
+        <span class="flex items-center justify-between gap-2"><b class="text-[12px] text-dark truncate">@${esc(r.seller)}</b><span class="text-[9px] text-[#9AA3B5] shrink-0">${fmtList(r.updated)}</span></span>
+        <span class="block text-[10px] text-glaucous truncate">${esc(r.product.name)}</span>
+        <span class="flex items-center justify-between gap-2"><span class="text-[10px] text-[#9AA3B5] truncate">${esc(last.text)}</span>${r.unread ? `<span class="shrink-0 w-4 h-4 rounded-full bg-moss text-white text-[9px] font-bold flex items-center justify-center">${r.unread}</span>` : ''}</span>
+      </span></button>`;
+  }).join('') : '<p class="px-4 text-[12px] text-[#6B7280] leading-relaxed">Belum ada chat. Buka barang lalu klik "Chat Penjual" buat mulai nego.</p>';
+}
+
+function renderThread(){
+  const r = ROOMS[ACTIVE];
+  const has = !!r;
+  $('#chatEmpty').classList.toggle('hidden', has); $('#chatEmpty').classList.toggle('flex', !has);
+  $('#threadBody').classList.toggle('hidden', !has); $('#threadBody').classList.toggle('flex', has);
+  $('#chatBox').dataset.m = has ? 'thread' : 'list';
+  if (!has) return;
+  const p = r.product;
+  const av = $('#thAv'); av.textContent = r.seller[0].toUpperCase(); av.style.background = avColor(r.seller);
+  $('#thName').textContent = '@' + r.seller;
+  const rt = ratingOf(r.seller);
+  $('#thMeta').innerHTML = `${esc(p.campus)} · <span class="text-[#E0A800]">★</span> ${rt >= 4.95 ? '5' : rt.toFixed(1)}`;
+  $('#thProd').innerHTML = `
+    <span class="w-10 h-10 shrink-0 rounded-lg overflow-hidden bg-powder">${img(p.img, p.name)}</span>
+    <span class="min-w-0 flex-1"><b class="block text-[12px] text-dark truncate">${esc(p.name)}</b><span class="serif text-[13px] font-semibold text-glaucous">${rp(p.price)}</span></span>
+    <span class="shrink-0 text-[9px] font-semibold rounded-full bg-[#E4F0CA] text-[#2F5233] px-2 py-0.5">${esc(p.cond)}</span>`;
+  $('#msgs').innerHTML = r.messages.map(m => m.from === 'sys'
+    ? `<p class="text-center text-[10px] text-[#9AA3B5] py-1">${esc(m.text)}</p>`
+    : `<div class="flex flex-col ${m.from === 'me' ? 'items-end' : 'items-start'}">
+        <div class="max-w-[78%] px-4 py-2.5 rounded-2xl text-[12.5px] leading-snug break-words ${m.from === 'me' ? 'bg-[#5E7BA6] text-white rounded-br-md' : 'bg-[#EEF1EC] text-dark rounded-bl-md'}">${esc(m.text)}</div>
+        <span class="mt-1 text-[9px] text-[#B3B8C6]">${fmtTime(m.t)}</span></div>`).join('');
+  const mb = $('#msgs'); mb.scrollTop = mb.scrollHeight;
+  $('#msgIn').placeholder = `Tanya @${r.seller}…`;
+  renderHandoff();
+}
+function renderChat(){ renderRoomList(); renderThread(); updateChatDot(); }
+
+function openRoom(key){
+  ACTIVE = key; const r = ROOMS[key]; if (r) { r.unread = 0; saveRooms(); }
+  history.replaceState(null, '', '#/chat' + (key ? '?room=' + encodeURIComponent(key) : ''));
+  renderChat();
+}
+$('#roomList').addEventListener('click', e => { const b = e.target.closest('[data-room]'); if (b) openRoom(b.dataset.room); });
+$('#thBack').addEventListener('click', () => openRoom(null));
+
+function enterChat(params){
+  loadRooms();
+  const pid = params.get('new');
+  if (pid) {
+    const p = PRODUCTS.find(x => x.id === pid);
+    if (!p) { location.replace('#/chat'); return; }
+    if (p.seller === me.username) { toast('Itu barangmu sendiri, nggak bisa chat sama diri sendiri.'); location.replace('#/chat'); return; }
+    const key = p.seller + '-' + p.id;
+    if (!ROOMS[key]) {
+      const r = baseRoom(p); r.messages.push({from:'me', text:'Hi kak, ini masih ada?', t:Date.now()});
+      ROOMS[key] = r; saveRooms(); autoReply(key, 'Masih kak.', 1400);
+    }
+    location.replace('#/chat?room=' + encodeURIComponent(key)); return;
+  }
+  const want = params.get('room');
+  ACTIVE = want && ROOMS[want] ? want : (matchMedia('(min-width:768px)').matches ? (sortedKeys()[0] || null) : null);
+  if (ACTIVE) { ROOMS[ACTIVE].unread = 0; saveRooms(); }
+  renderChat();
+}
+
+/* kirim pesan */
+$('#msgIn').addEventListener('input', e => {
+  const on = e.target.value.trim().length > 0, b = $('#msgSend');
+  b.disabled = !on; b.className = 'shrink-0 w-11 h-11 rounded-full text-white flex items-center justify-center transition ' + (on ? 'bg-glaucous hover:bg-[#6a89b0] press' : 'bg-[#C5CAD1]');
+});
+function sendMsg(text){
+  text = text.trim(); if (!text || !ACTIVE) return;
+  const key = ACTIVE, r = ROOMS[key];
+  pushMsg(r, 'me', text); renderThread(); renderRoomList();
+  autoReply(key, replyFor(text));
+}
+$('#msgForm').addEventListener('submit', e => { e.preventDefault(); const i = $('#msgIn'); sendMsg(i.value); i.value = ''; i.dispatchEvent(new Event('input')); });
+
+/* tawar harga */
+$('#tawar').addEventListener('click', () => {
+  const r = ROOMS[ACTIVE]; if (!r) return;
+  const sug = Math.round(r.product.price * 0.9 / 1000) * 1000;
+  openDlg(`<h3 class="serif text-[22px] font-semibold text-dark">Tawar harga</h3>
+    <p class="mt-1 text-[12px] text-[#6B7280]">Harga sekarang ${rp(r.product.price)}. Tawar yang sopan, ya.</p>
+    <form id="offerForm" class="mt-4" novalidate>
+      <label class="lbl" for="oVal">Tawaranmu</label>
+      <div class="relative"><span class="absolute left-4 top-1/2 -translate-y-1/2 text-[13px] font-semibold text-[#9AA3B5]">Rp</span><input id="oVal" class="inp pl" inputmode="numeric" maxlength="9" value="${sug}"></div>
+      <p data-err="oVal" class="err hidden"></p>
+      <div class="mt-5 flex gap-2">
+        <button type="button" data-dlg-close class="flex-1 min-h-[44px] rounded-xl border border-black/15 text-[13px] font-semibold text-dark press">Batal</button>
+        <button class="flex-1 min-h-[44px] rounded-xl bg-glaucous text-white text-[13px] font-bold press">Kirim tawaran</button>
+      </div>
+    </form>`);
+});
+
+/* serah terima: COD & Lalamove */
+$('#hoToggle').addEventListener('click', () => { const r = ROOMS[ACTIVE]; if (!r) return; r.ho.open = !r.ho.open; saveRooms(); renderHandoff(); });
+const statusOf = r => (r.method === 'LALAMOVE' && r.lm) ? (r.lm.cancel ? 'Dibatalkan' : LM_STEPS[r.lm.step]) : r.cod;
+function renderHandoff(){
+  const r = ROOMS[ACTIVE], h = r.ho;
+  $('#hoStatus').textContent = statusOf(r);
+  $('#hoToggle').setAttribute('aria-expanded', h.open);
+  $('#hoChev').style.transform = h.open ? 'rotate(180deg)' : '';
+  $('#hoBody').classList.toggle('hidden', !h.open);
+  if (!h.open) return;
+  const tab = (id, l) => `<button data-ho="tab" data-v="${id}" class="flex-1 min-h-[40px] rounded-lg text-[12px] font-semibold ${h.tab === id ? 'bg-dark text-white' : 'bg-[#F6F4EA] text-[#374151]'}">${l}</button>`;
+  $('#hoBody').innerHTML = `<div class="flex gap-2 mt-1">${tab('COD','COD')}${tab('LM','Lalamove')}</div>` + (h.tab === 'COD' ? codHTML(r) : lmHTML(r));
+}
+function codHTML(r){
+  const h = r.ho, s = r.cod, steps = ['Negosiasi','Janji COD disepakati','Selesai'], idx = steps.indexOf(s), end = s === 'Selesai' || s === 'Dibatalkan';
+  const tl = steps.map((x, i) => `<li class="flex items-center gap-1.5 ${i <= idx && s !== 'Dibatalkan' ? 'text-dark font-semibold' : 'text-[#9AA3B5]'}"><span class="stepdot" style="background:${i <= idx && s !== 'Dibatalkan' ? '#12291C' : '#C9CEDB'}">${i+1}</span>${x}</li>`).join('<li class="w-3 border-t border-dotted border-[#C9CEDB]"></li>');
+  const btn = (a, l, cls) => `<button data-ho="${a}" class="flex-1 min-h-[44px] rounded-xl text-[12px] font-bold press ${cls}">${l}</button>`;
+  let acts = '';
+  if (s === 'Negosiasi') acts = btn('agree','Sepakati janji','bg-glaucous text-white') + btn('cancel','Batalkan','border border-black/15 text-dark');
+  else if (s === 'Janji COD disepakati') acts = btn('done','Tandai selesai','bg-moss text-white') + btn('cancel','Batalkan','border border-black/15 text-dark');
+  else if (s === 'Dibatalkan') acts = btn('reset','Mulai lagi','bg-glaucous text-white');
+  return `<p class="mt-3 text-[11px] text-[#6B7280]">Bayar tunai pas ketemu. Janjian titik temu lewat chat, pilih tempat ramai dan siang hari.</p>
+    <label class="lbl mt-3" for="hoMeet">Titik temu</label>
+    <input id="hoMeet" class="inp" ${end ? 'disabled' : ''} value="${esc(h.meet)}" maxlength="80" placeholder="Contoh: Lobby kampus">
+    ${end ? '' : `<button data-ho="suggest" class="mt-2 w-full min-h-[44px] rounded-xl bg-[#F6F4EA] hover:bg-[#EDEAD8] text-dark text-[12px] font-semibold press">Usulkan Titik Temu</button>`}
+    <ol class="mt-4 flex flex-wrap items-center gap-y-2 text-[10px]">${tl}</ol>
+    ${s === 'Dibatalkan' ? '<p class="mt-2 text-[11px] font-semibold text-[#B91C1C]">Dibatalkan</p>' : ''}
+    ${acts ? `<div class="mt-4 flex gap-2">${acts}</div>` : ''}`;
+}
+function estimateHTML(r){
+  const h = r.ho, fee = ongkir(h.km, h.size), extra = Math.max(0, Math.ceil(h.km - 3)), sur = h.size === 'Sedang' ? 5000 : h.size === 'Besar' ? 25000 : 0;
+  return `<div class="flex justify-between"><span class="text-[#6B7280]">Harga barang</span><b>${rp(r.product.price)}</b></div>
+    <div class="flex justify-between"><span class="text-[#6B7280]">Ongkir (${h.km} km${sur ? ', ' + h.size : ''})</span><b>${rp(fee)}</b></div>
+    <div class="flex justify-between border-t border-black/10 pt-2"><span class="font-semibold">Total</span><b class="text-glaucous">${rp(r.product.price + fee)}</b></div>
+    <p class="text-[10px] text-[#9AA3B5]">Simulasi: Rp10.000 untuk ≤3 km${extra ? ` + ${extra} km × Rp2.500` : ''}${sur ? ` + ukuran ${h.size} ${rp(sur)}` : ''}.</p>`;
+}
+function updateEstimate(){ const r = ROOMS[ACTIVE], el = $('#lmEst'); if (r && el) el.innerHTML = estimateHTML(r); }
+function lmHTML(r){
+  const h = r.ho, lm = r.lm;
+  if (!lm) return `<p class="mt-3 text-[11px] text-[#6B7280]">Ukuran barang diisi penjual. Kurir jemput di lokasi penjual lalu antar ke alamat pembeli.</p>
+    <span class="lbl mt-3">Ukuran barang</span>
+    <div class="grid grid-cols-3 gap-2">${LM_SIZES.map(([s, d]) => `<button data-ho="size" data-v="${s}" class="min-h-[52px] rounded-xl text-center ${h.size === s ? 'bg-dark text-white' : 'bg-[#F6F4EA] text-[#374151]'}"><b class="block text-[12px]">${s}</b><span class="text-[9px] opacity-80">${d}</span></button>`).join('')}</div>
+    <label class="lbl mt-3" for="hoAddr">Alamat pembeli</label>
+    <input id="hoAddr" class="inp" value="${esc(h.addr)}" maxlength="120" placeholder="Contoh: Kos Putri Melati, Jl. Kalijudan">
+    <label class="lbl mt-3" for="hoKm">Jarak dari penjual (km)</label>
+    <input id="hoKm" class="inp" type="number" min="0.5" step="0.5" value="${h.km}">
+    <div id="lmEst" class="mt-3 rounded-xl bg-[#F6F4EA] border border-[#E8E4D0] p-3 text-[12px] space-y-1.5">${estimateHTML(r)}</div>
+    <button data-ho="lmstart" class="mt-3 w-full min-h-[44px] rounded-xl bg-glaucous text-white text-[12px] font-bold press">Pesan Lalamove</button>`;
+  const tl = LM_STEPS.map((s, i) => { const done = !lm.cancel && i <= lm.step; return `<li class="flex items-center gap-2.5 py-1 ${done ? 'text-dark font-semibold' : 'text-[#9AA3B5]'}"><span class="w-2.5 h-2.5 rounded-full" style="background:${done ? '#7A9445' : '#D5D9E3'}"></span>${s}</li>`; }).join('');
+  const total = r.product.price + lm.fee;
+  let acts = '';
+  if (!lm.cancel) {
+    if (lm.step === 0) acts = `<button data-ho="lmnext" class="flex-1 min-h-[44px] rounded-xl bg-glaucous text-white text-[12px] font-bold press">Bayar ${rp(total)} (simulasi)</button><button data-ho="lmcancel" class="min-h-[44px] px-4 rounded-xl border border-black/15 text-[12px] font-bold text-dark press">Batalkan</button>`;
+    else if (lm.step < 4) acts = `<button data-ho="lmnext" class="flex-1 min-h-[44px] rounded-xl bg-moss text-white text-[12px] font-bold press">Lanjutkan simulasi</button>${lm.step === 1 ? '<button data-ho="lmcancel" class="min-h-[44px] px-4 rounded-xl border border-black/15 text-[12px] font-bold text-dark press">Batalkan</button>' : ''}`;
+  } else acts = `<button data-ho="lmreset" class="flex-1 min-h-[44px] rounded-xl bg-glaucous text-white text-[12px] font-bold press">Pesan ulang</button>`;
+  return `<div class="mt-3 rounded-xl bg-[#F6F4EA] border border-[#E8E4D0] p-3 text-[12px] space-y-1">
+      <div class="flex justify-between"><span class="text-[#6B7280]">Ukuran</span><b>${esc(lm.size)}</b></div>
+      <div class="flex justify-between"><span class="text-[#6B7280]">Alamat</span><b class="text-right truncate max-w-[60%]">${esc(lm.addr)}</b></div>
+      <div class="flex justify-between"><span class="text-[#6B7280]">Barang + ongkir</span><b>${rp(r.product.price)} + ${rp(lm.fee)}</b></div>
+      <div class="flex justify-between border-t border-black/10 pt-1.5"><span class="font-semibold">Total</span><b class="text-glaucous">${rp(total)}</b></div></div>
+    <ol class="mt-3">${tl}</ol>
+    ${lm.cancel ? '<p class="text-[11px] font-semibold text-[#B91C1C]">Dibatalkan</p>' : ''}
+    ${acts ? `<div class="mt-3 flex gap-2">${acts}</div>` : ''}`;
+}
+$('#hoBody').addEventListener('click', e => { const b = e.target.closest('[data-ho]'); if (b && ACTIVE) doHo(b.dataset.ho, b.dataset.v); });
+$('#hoBody').addEventListener('input', e => {
+  const r = ROOMS[ACTIVE]; if (!r) return;
+  if (e.target.id === 'hoMeet') r.ho.meet = e.target.value;
+  else if (e.target.id === 'hoAddr') r.ho.addr = e.target.value;
+  else if (e.target.id === 'hoKm') { r.ho.km = Math.max(0.5, parseFloat(e.target.value) || 0.5); updateEstimate(); }
+  saveRooms();
+});
+function doHo(a, v){
+  const r = ROOMS[ACTIVE], h = r.ho, sys = t => pushMsg(r, 'sys', t);
+  if (a === 'tab') h.tab = v;
+  else if (a === 'size') h.size = v;
+  else if (a === 'suggest') { h.meet = MEET[r.product.campus] || 'Titik temu kampus'; pushMsg(r, 'me', `Aku usul ketemu di ${h.meet}, bisa kak?`); autoReply(ACTIVE, 'Boleh kak, di situ aja.'); }
+  else if (a === 'agree') { if (!h.meet.trim()) { toast('Isi titik temunya dulu ya.'); return; } r.cod = 'Janji COD disepakati'; r.method = 'COD'; sys('Janji COD disepakati di ' + h.meet.trim()); }
+  else if (a === 'done') { r.cod = 'Selesai'; sys('COD selesai.'); }
+  else if (a === 'cancel') { r.cod = 'Dibatalkan'; sys('COD dibatalkan.'); }
+  else if (a === 'reset') { r.cod = 'Negosiasi'; sys('Status COD diulang dari Negosiasi.'); }
+  else if (a === 'lmstart') { if (!h.addr.trim()) { toast('Isi alamat pembeli dulu ya.'); return; } r.lm = {step:0, cancel:false, size:h.size, km:h.km, addr:h.addr.trim(), fee:ongkir(h.km, h.size)}; r.method = 'LALAMOVE'; sys(`Lalamove dipesan (${h.size}, ${h.km} km). Menunggu pembayaran.`); }
+  else if (a === 'lmnext') { if (r.lm.step < 4) { r.lm.step++; sys('Status Lalamove: ' + LM_STEPS[r.lm.step]); } }
+  else if (a === 'lmcancel') { r.lm.cancel = true; sys('Lalamove dibatalkan.'); }
+  else if (a === 'lmreset') { r.lm = null; r.method = null; }
+  r.updated = Date.now(); saveRooms(); renderThread(); renderRoomList();
+}
+
+/* ================= DIALOG: tawar & edit profil (submit) ================= */
+$('#dlg').addEventListener('submit', e => {
+  e.preventDefault();
+  if (e.target.id === 'offerForm') {
+    const r = ROOMS[ACTIVE]; const val = +($('#oVal').value.replace(/\D/g,'') || 0);
+    if (!val) { setErr('oVal', 'Isi nominal tawaranmu.'); return; }
+    if (val >= r.product.price) { setErr('oVal', 'Tawaran harus di bawah harga sekarang.'); return; }
+    closeDlg(); sendMsg(`Boleh nego jadi ${rp(val)} kak?`);
+  } else if (e.target.id === 'editForm') {
+    const name = $('#eName').value.trim(), wa = $('#eWa').value.replace(/[\s-]/g,''), c = $('#eCampus').value, bio = $('#eBio').value.trim();
+    ['eName','eWa'].forEach(k => setErr(k, '')); let bad = false;
+    if (name.length < 2) { setErr('eName', 'Nama minimal 2 huruf.'); bad = true; }
+    if (!reWA.test(wa)) { setErr('eWa', 'Nomor WhatsApp belum valid.'); bad = true; }
+    if (bad) return;
+    saveMe({name, wa, campus:c, bio}); closeDlg(); renderAuthUI(); renderProfile(PTAB); toast('Profil udah diperbarui.');
+  }
+});
+
+
+/* ╔════════════════════════════════════════════════════════════╗
+   ║  JS PROFIL                                                  ║
+   ╚════════════════════════════════════════════════════════════╝ */
+const REVIEWS_DEMO = [
+  {by:'raka_unair', stars:5, text:'Barang sesuai deskripsi, COD lancar dan ramah.'},
+  {by:'sari_petra', stars:5, text:'Fast respon, harganya ramah anak kos.'},
+  {by:'dino_its', stars:4, text:'Barangnya bagus, cuma ketemuannya agak telat dikit.'}
+];
+let PTAB = 'dijual';
+function renderProfile(tab){
+  PTAB = ['dijual','terjual','disimpan','pembelian','ulasan'].includes(tab) ? tab : 'dijual';
+  const sold = new Set(me.sold || []);
+  const active = PRODUCTS.filter(p => p.seller === me.username && !sold.has(p.id));
+  const soldList = PRODUCTS.filter(p => sold.has(p.id));
+  const purchases = Array.isArray(me.purchases) ? me.purchases : [];
+  $('#pAv').textContent = me.name.trim()[0].toUpperCase();
+  $('#pName').textContent = me.name;
+  $('#pMeta').textContent = `@${me.username} · ${me.campus}`;
+  $('#pRate').innerHTML = me.reviewCount ? `<span class="text-moss tracking-wider">${stars(me.rating)}</span> <b>${me.rating.toFixed(1)}</b> <span class="text-[#9AA3B5]">(${me.reviewCount} ulasan)</span>` : '<span class="text-[#9AA3B5]">Belum ada ulasan</span>';
+  const bio = $('#pBio'); bio.textContent = me.bio || ''; bio.classList.toggle('hidden', !me.bio);
+  const stat = (n, l) => `<div><b class="serif block text-[22px] font-semibold text-dark leading-none">${n}</b><span class="text-[10px] text-[#9AA3B5]">${l}</span></div>`;
+  $('#pStats').innerHTML = stat(active.length, 'Dijual') + stat((me.soldBase || 0) + sold.size, 'Terjual') + stat(wish.length, 'Disimpan') + stat(purchases.length, 'Beli');
+
+  document.querySelectorAll('[data-ptab]').forEach(b => {
+    const on = b.dataset.ptab === PTAB; b.setAttribute('aria-selected', on);
+    b.className = 'min-h-[44px] rounded-lg text-[12px] font-semibold transition ' + (on ? 'bg-[#12291C] text-white' : 'text-[#9AA3B5] hover:text-dark');
+  });
+  const empty = (t, s, cta) => `<div class="text-center py-12"><p class="serif text-[20px] font-semibold text-dark">${t}</p><p class="mt-1 text-[12px] text-[#6B7280]">${s}</p>${cta || ''}</div>`;
+  const grid = $('#pGrid'), other = $('#pOther'); other.innerHTML = ''; grid.innerHTML = '';
+  if (PTAB === 'dijual') {
+    grid.innerHTML = active.map(p => `<div>${cardHTML(p)}<div class="mt-2 flex gap-2"><button data-sold="${esc(p.id)}" class="flex-1 min-h-[44px] rounded-xl bg-[#E4F0CA] text-[#2F5233] text-[11px] font-bold press">Tandai terjual</button>${p.own ? `<button data-del="${esc(p.id)}" class="min-h-[44px] px-3 rounded-xl border border-black/15 text-[11px] font-bold text-[#B91C1C] press" aria-label="Hapus ${esc(p.name)}">Hapus</button>` : ''}</div></div>`).join('');
+    if (!active.length) other.innerHTML = empty('Belum ada barang yang dijual.', 'Foto, kasih harga, pilih kampus, selesai.', '<a href="#/jual" class="inline-flex items-center justify-center mt-5 bg-glaucous text-white font-bold text-[13px] px-6 min-h-[44px] rounded-xl press">Pindahin Barang</a>');
+  } else if (PTAB === 'terjual') {
+    grid.innerHTML = soldList.map(cardHTML).join('');
+    if (!soldList.length) other.innerHTML = empty('Belum ada yang terjual.', 'Tandai barangmu terjual dari tab Dijual kalau udah deal.');
+  } else if (PTAB === 'disimpan') {
+    const w = wish.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+    grid.innerHTML = w.map(cardHTML).join('');
+    if (!w.length) other.innerHTML = empty('Belum ada yang disimpan.', 'Siapa tahu besok tiba-tiba butuh.', '<a href="#/jelajahi" class="inline-flex items-center justify-center mt-5 bg-glaucous text-white font-bold text-[13px] px-6 min-h-[44px] rounded-xl press">Cari Barang</a>');
+  } else if (PTAB === 'pembelian') {
+    const history = purchases.map(item => {
+      const product = PRODUCTS.find(p => p.id === item.id) || FAN.find(p => p.id === item.id);
+      return { ...item, product };
+    });
+    grid.innerHTML = history.map(item => `
+      <div class="rounded-2xl border border-black/[0.06] bg-white p-3">
+        <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-powder">
+          <img src="${item.product ? (item.product.img || PH) : (item.img || PH)}" alt="${esc(item.name)}" class="w-full h-full object-cover">
+        </div>
+        <div class="mt-3">
+          <p class="text-[12px] font-semibold text-[#111827] truncate">${esc(item.name)}</p>
+          <p class="mt-1 serif text-[16px] font-semibold text-glaucous">${rp(item.price)}</p>
+          <p class="mt-2 text-[10px] text-[#9AA3B5]">No. pesanan: ${esc(item.orderNo || '-')}</p>
+          <p class="mt-1 text-[10px] font-semibold text-[#2F5233]">${esc(item.status || 'Selesai')}</p>
+          <p class="mt-1 text-[10px] text-[#6B7280]">${esc(item.date ? new Date(item.date).toLocaleDateString('id-ID') : '')}</p>
+        </div>
+      </div>
+    `).join('');
+    if (!history.length) other.innerHTML = empty('Belum ada riwayat pembelian.', 'Semua barang yang kamu beli akan muncul di sini.', '<a href="#/jelajahi" class="inline-flex items-center justify-center mt-5 bg-glaucous text-white font-bold text-[13px] px-6 min-h-[44px] rounded-xl press">Mulai Belanja</a>');
+  } else {
+    const rv = me.username === 'naya_ukwms' ? REVIEWS_DEMO : [];
+    other.innerHTML = rv.length ? `<ul class="space-y-3">${rv.map(r => `<li class="rounded-2xl border border-black/[0.06] bg-white p-4"><div class="flex items-center justify-between"><b class="text-[12px] text-dark">@${esc(r.by)}</b><span class="text-moss text-[12px] tracking-wider">${stars(r.stars)}</span></div><p class="mt-1 text-[12px] text-[#374151]">${esc(r.text)}</p></li>`).join('')}</ul>` : empty('Belum ada ulasan.', 'Ulasan muncul setelah transaksi pertamamu selesai.');
+  }
+}
+bindCards($('#pGrid'));
+document.querySelectorAll('[data-ptab]').forEach(b => b.addEventListener('click', () => { history.replaceState(null, '', '#/profil?tab=' + b.dataset.ptab); renderProfile(b.dataset.ptab); }));
+$('#pGrid').addEventListener('click', e => {
+  const s = e.target.closest('[data-sold]'), d = e.target.closest('[data-del]');
+  if (s) { saveMe({sold:[...(me.sold || []), s.dataset.sold]}); refreshSold(); renderProducts(); renderProfile(PTAB); toast('Mantap, barangmu terjual.'); }
+  if (d) askConfirm('Hapus barang ini?', 'Barang bakal hilang dari Jelajahi dan nggak bisa dikembalikan.', 'Hapus', () => {
+    const id = d.dataset.del, i = PRODUCTS.findIndex(p => p.id === id); if (i > -1) PRODUCTS.splice(i, 1);
+    store.set('pa_listings', store.get('pa_listings', []).filter(p => p.id !== id));
+    wish = wish.filter(x => x !== id); store.set('pa_wish', wish); updateBadge(); renderProducts(); renderProfile(PTAB); toast('Barang dihapus.');
+  });
+});
+$('#pEdit').addEventListener('click', () => {
+  openDlg(`<h3 class="serif text-[22px] font-semibold text-dark">Edit profil</h3>
+    <form id="editForm" class="mt-4 space-y-4" novalidate>
+      <div><label class="lbl" for="eName">Nama</label><input id="eName" class="inp" maxlength="40" value="${esc(me.name)}"><p data-err="eName" class="err hidden"></p></div>
+      <div><label class="lbl" for="eCampus">Kampus</label><select id="eCampus" class="inp">${CAMPUS.map(c => { const v = c.id === 'LAIN' ? 'Lainnya' : c.id; return `<option value="${v}" ${me.campus === v ? 'selected' : ''}>${c.name || c.ab}</option>`; }).join('')}</select></div>
+      <div><label class="lbl" for="eWa">WhatsApp</label><input id="eWa" class="inp" inputmode="tel" maxlength="16" value="${esc(me.wa)}"><p data-err="eWa" class="err hidden"></p></div>
+      <div><label class="lbl" for="eBio">Bio singkat</label><textarea id="eBio" class="inp" maxlength="120" placeholder="Contoh: Anak kos Kalijudan, suka barang awet.">${esc(me.bio || '')}</textarea></div>
+      <div class="flex gap-2 pt-1"><button type="button" data-dlg-close class="flex-1 min-h-[44px] rounded-xl border border-black/15 text-[13px] font-semibold text-dark press">Batal</button><button class="flex-1 min-h-[44px] rounded-xl bg-glaucous text-white text-[13px] font-bold press">Simpan</button></div>
+    </form>`);
+});
+
+
+/* ================= ROUTER (hash) ================= */
+/* #/ Home | #/home/<id> | #/jelajahi?q=&kampus=&kategori= | #/jual | #/wishlist | #/chat?room= / ?new=<idProduk> | #/profil?tab= | #/masuk | #/daftar */
+const VIEWS = ['home','produk','jelajahi','jual','wishlist','chat','profil','masuk','daftar'];
+function parseHash(){
+  const h = location.hash.replace(/^#\/?/, '');
+  const [path, qs = ''] = h.split('?');
+  return {path: path.split('/').filter(Boolean), params: new URLSearchParams(qs)};
+}
+const ACT = ['text-[#C6E03A]','underline','decoration-2','underline-offset-[6px]'];
+function route(){
+  const {path, params} = parseHash();
+  const name = VIEWS.includes(path[0]) ? path[0] : 'home';
+  if ((name === 'chat' || name === 'profil') && !me) { location.replace('#/masuk?next=' + encodeURIComponent(location.hash)); return; }
+  if ((name === 'masuk' || name === 'daftar') && me) { location.replace('#/profil'); return; }
+
+  VIEWS.forEach(v => $('#view-' + v).classList.toggle('hidden', v !== name));
+  document.body.dataset.route = name;   /* ✏️ DIUBAH (revisi chat): footer/info bar kini diatur lewat CSS (hanya disembunyikan di mobile) */
+
+  document.querySelectorAll('[data-nav]').forEach(a => {
+    const on = a.dataset.nav === name;
+    if (a.classList.contains('header-nav-item')) {
+      a.classList.toggle('active', on);
+      a.classList.toggle('text-white', !on);
+      a.classList.toggle('text-[#C6E03A]', on);
+    } else {
+      ACT.forEach(c => a.classList.toggle(c, on));
+      a.classList.toggle('text-white', !on);
+    }
+  });
+  document.querySelectorAll('[data-bnav]').forEach(a => {
+    const on = a.dataset.bnav === name;
+    a.classList.toggle('text-dark', on); a.classList.toggle('text-[#6B7280]', !on);
+  });
+  $('#mMenu').classList.add('hidden'); $('#burger').setAttribute('aria-expanded', 'false');
+  closeModal(); closeSheet(); closeDlg(); sg.classList.add('hidden'); $('#acctMenu').classList.add('hidden');
+
+  const top = () => window.scrollTo({top:0, behavior:'instant'});
+  if (name === 'produk') {
+    document.title = 'Detail Produk — PINDAHIN AJA';
+    renderDetailPage(params.get('id') || '');
+    top();
+  } else if (name === 'jelajahi') {
+    document.title = 'Jelajahi — PINDAHIN AJA';
+    F = defaults();
+    F.q = params.get('q') || '';
+    const k = (params.get('kampus') || '').toUpperCase();
+    if (CAMPUS.some(c => c.id === k)) F.campus = k;
+    const c = params.get('kategori') || '';
+    if (CATS.some(x => x.q === c)) F.cat = c;
+    renderJ(); top();
+  } else if (name === 'jual') {
+    document.title = 'Jual Barang — PINDAHIN AJA'; renderJChips(); top();
+  } else if (name === 'wishlist') {
+    document.title = 'Barang yang kamu simpan — PINDAHIN AJA'; renderWish(); top();
+  } else if (name === 'chat') {
+    document.title = 'Chat — PINDAHIN AJA'; enterChat(params); top();
+  } else if (name === 'profil') {
+    document.title = 'Profil — PINDAHIN AJA'; renderProfile(params.get('tab')); top();
+  } else if (name === 'masuk' || name === 'daftar') {
+    document.title = (name === 'masuk' ? 'Masuk' : 'Daftar') + ' — PINDAHIN AJA';
+    NEXT = params.get('next') || '';
+    const suf = NEXT ? '?next=' + encodeURIComponent(NEXT) : '';
+    $('#toDaftar').href = '#/daftar' + suf; $('#toMasuk').href = '#/masuk' + suf;
+    $('#lPw').value = ''; top();
+  } else {
+    document.title = 'PINDAHIN AJA — Barang nggak kepakai? Pindahin aja.';
+    const target = path[1] && document.getElementById(path[1]);
+    if (target) target.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'});
+    else top();
+  }
+}
+window.addEventListener('hashchange', route);
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#/"]');
+  if (a && a.getAttribute('href') === location.hash) { e.preventDefault(); route(); }
+});
+
+/* ================= INIT ================= */
+(async function init(){
+  await ensureDemo();
+  loadMe(); refreshSold();
+  store.get('pa_listings', []).forEach(p => { if (!PRODUCTS.some(x => x.id === p.id)) PRODUCTS.push(p); });
+  loadRooms();
+  renderAuthUI();
+  renderCampus();
+  renderProducts();
+  updateBadge();
+  renderJChips();
+  initIcons();
+  route();
+  if (me) setTimeout(maybeShowVoucherPopup, 220);
+})();
+</script>
+</body>
+</html>
